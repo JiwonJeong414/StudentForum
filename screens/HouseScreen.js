@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { Button, IconButton, TextInput } from "react-native-paper";
@@ -49,55 +49,102 @@ export default function HouseScreen() {
       })
       .then(() => {
         console.log("User data added to Cloud Firestore");
+        retrieveKey(idd);
         navigation.navigate("Home");
       });
   };
 
+  const retrieveKey = async (id) => {
+    await AsyncStorage.setItem("Key", JSON.stringify(id));
+  };
+
   return (
     <View style={styles.container}>
+      <Image
+        style={{
+          width: moderateScale(190),
+          height: moderateScale(190),
+          position: "absolute",
+          top: moderateScale(120),
+        }}
+        source={require("../assets/images/sf-logo.png")}
+      />
+      <Text
+        style={{
+          fontSize: moderateScale(30),
+          fontFamily: "Robot",
+          top: moderateScale(-50),
+        }}
+      >
+        Choose Your House
+      </Text>
       <Button
         mode="contained"
         style={{
-          marginTop: moderateScale(40),
-
-          backgroundColor: "#55BCF6",
+          position: "absolute",
+          width: moderateScale(130),
+          height: moderateScale(50),
+          left: moderateScale(50),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(420),
+          backgroundColor: "#eb7cd8",
         }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
         onPress={() => handleSetUser("Pink House")}
       >
-        Pink House
+        Pink
       </Button>
       <Button
         mode="contained"
         style={{
-          marginTop: moderateScale(40),
-
-          backgroundColor: "#55BCF6",
+          position: "absolute",
+          width: moderateScale(130),
+          height: moderateScale(50),
+          left: moderateScale(200),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(420),
+          backgroundColor: "#0000FF",
         }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
         onPress={() => handleSetUser("Blue House")}
       >
-        Blue House
+        Blue
       </Button>
       <Button
         mode="contained"
         style={{
-          marginTop: moderateScale(40),
-
-          backgroundColor: "#55BCF6",
+          position: "absolute",
+          width: moderateScale(130),
+          height: moderateScale(50),
+          left: moderateScale(50),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(520),
+          backgroundColor: "#228B22",
         }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
         onPress={() => handleSetUser("Green House")}
       >
-        Green House
+        Green
       </Button>
       <Button
         mode="contained"
         style={{
-          marginTop: moderateScale(40),
-
-          backgroundColor: "#55BCF6",
+          position: "absolute",
+          width: moderateScale(130),
+          height: moderateScale(50),
+          left: moderateScale(200),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(520),
+          backgroundColor: "#FFA500",
         }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
         onPress={() => handleSetUser("Orange House")}
       >
-        Orange House
+        Orange
       </Button>
     </View>
   );

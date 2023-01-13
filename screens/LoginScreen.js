@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+} from "react-native";
 import React, { useState } from "react";
 import uuid from "react-native-uuid";
 import "firebase/firestore";
@@ -27,26 +34,44 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
+      <Image
+        style={{
+          width: moderateScale(190),
+          height: moderateScale(190),
+          position: "absolute",
+          top: moderateScale(120),
+        }}
+        source={require("../assets/images/sf-logo.png")}
+      />
       <TextInput
         label="First Name"
         onChangeText={(text) => setFirstName(text)}
         style={{ width: "60%" }}
+        mode="outlined"
+        activeOutlineColor="#55BCF6"
       />
       <TextInput
         label="Last Name"
         onChangeText={(text) => setLastName(text)}
         style={{ width: "60%", marginTop: moderateScale(20) }}
+        mode="outlined"
+        activeOutlineColor="#55BCF6"
       />
       <Button
         mode="contained"
         onPress={handleAddUserData}
         style={{
           position: "absolute",
-          left: moderateScale(250),
-          top: moderateScale(600),
+          width: moderateScale(90),
+          height: moderateScale(38),
+          left: moderateScale(212),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(520),
           backgroundColor: "#55BCF6",
         }}
+        labelStyle={{ fontSize: moderateScale(15) }}
       >
         Next
       </Button>
@@ -55,14 +80,19 @@ export default function LoginScreen() {
         onPress={handleAdmin}
         style={{
           position: "absolute",
-          left: moderateScale(80),
-          top: moderateScale(600),
+          width: moderateScale(90),
+          height: moderateScale(38),
+          left: moderateScale(75),
+          justifyContent: "center",
+          borderRadius: moderateScale(30),
+          top: moderateScale(520),
           backgroundColor: "#55BCF6",
         }}
+        labelStyle={{ fontSize: moderateScale(15) }}
       >
         Admin
       </Button>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

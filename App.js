@@ -16,6 +16,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   let [fontsLoaded] = useFonts({
     Robot: require("./assets/fonts/NotoSans-Medium.ttf"),
+    Ubuntu: require("./assets/fonts/UbuntuMono-Regular.ttf"),
   });
 
   return (
