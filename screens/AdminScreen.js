@@ -14,6 +14,7 @@ export default function AdminScreen() {
   const [tempid, setTempid] = useState("");
 
   const navigation = useNavigation();
+  const firestore = firebase.firestore();
 
   // updates automatically when incrementing on firebase
   useEffect(() => {
@@ -52,7 +53,6 @@ export default function AdminScreen() {
   };
 
   const onAddPress = (id) => {
-    const firestore = firebase.firestore();
     const usersRef = firestore.collection("users").doc("Pink House");
     console.log("id: " + id);
 
@@ -76,7 +76,6 @@ export default function AdminScreen() {
 
   const handleAdd = (id) => {
     showModal(false);
-    const firestore = firebase.firestore();
     const usersRef = firestore.collection("users").doc("Pink House");
     console.log("iddef: " + id);
 

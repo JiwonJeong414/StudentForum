@@ -5,104 +5,19 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from "moment";
 
-const Checkmark = ({ item }) => {
+const Checkmark = ({ item, handleAddTwo, handleUndoTwo }) => {
   const [checkMark, showCheckMark] = useState(false);
   const [today, setToday] = useState(moment().format("MM/DD/YYYY"));
+  const firestore = firebase.firestore();
 
   const handleAdd = (id) => {
     showCheckMark(true);
-    const firestore = firebase.firestore();
-    const usersRef = firestore.collection("users").doc("Pink House");
-
-    firestore
-      .runTransaction((transaction) => {
-        return transaction.get(usersRef).then((doc) => {
-          let users = doc.data().users;
-          let user = users.find((u) => u.id === id);
-          user.points += 1;
-          transaction.update(usersRef, { users });
-        });
-      })
-      .then(() => {
-        console.log("Transaction successfully committed!");
-      })
-      .catch((error) => {
-        console.log("Transaction failed: ", error);
-      });
-    setTimeout(() => {
-      handleAttendanceComment(id);
-    }, 1000);
-  };
-
-  const handleAttendanceComment = (id) => {
-    const firestore = firebase.firestore();
-    const usersRef = firestore.collection("users").doc("Pink House");
-
-    firestore
-      .runTransaction((transaction) => {
-        return transaction.get(usersRef).then((doc) => {
-          let users = doc.data().users;
-          let user = users.find((u) => u.id === id);
-          user.pointsHistory = [
-            ...user.pointsHistory,
-            "Meeting Attended On " + today,
-          ];
-          transaction.update(usersRef, { users });
-        });
-      })
-      .then(() => {
-        console.log("Transaction successfully committed!");
-      })
-      .catch((error) => {
-        console.log("Transaction failed: ", error);
-      });
+    handleAddTwo(id);
   };
 
   const handleUndo = (id) => {
     showCheckMark(false);
-    const firestore = firebase.firestore();
-    const usersRef = firestore.collection("users").doc("Pink House");
-
-    firestore
-      .runTransaction((transaction) => {
-        return transaction.get(usersRef).then((doc) => {
-          let users = doc.data().users;
-          let user = users.find((u) => u.id === id);
-          user.points -= 1;
-          transaction.update(usersRef, { users });
-        });
-      })
-      .then(() => {
-        console.log("Transaction successfully committed!");
-      })
-      .catch((error) => {
-        console.log("Transaction failed: ", error);
-      });
-
-    setTimeout(() => {
-      handleUndoComment(id);
-    }, 1000);
-  };
-
-  const handleUndoComment = (id) => {
-    const firestore = firebase.firestore();
-    const usersRef = firestore.collection("users").doc("Pink House");
-
-    firestore
-      .runTransaction((transaction) => {
-        return transaction.get(usersRef).then((doc) => {
-          let users = doc.data().users;
-          let user = users.find((u) => u.id === id);
-          user.pointsHistory.pop();
-          transaction.update(usersRef, { users });
-        });
-      })
-      .then(() => {
-        console.log("Transaction successfully committed!");
-      })
-      .catch((error) => {
-        console.log("Transaction failed: ", error);
-      });
+    handleUndoTwo(id);
   };
 
   return (

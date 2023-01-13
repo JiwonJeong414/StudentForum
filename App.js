@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import HouseScreen from "./screens/HouseScreen";
 import AdminScreen from "./screens/AdminScreen";
+import firebase from "./firebase";
 import AttendanceScreen from "./screens/AttendanceScreen";
 const Stack = createNativeStackNavigator();
 

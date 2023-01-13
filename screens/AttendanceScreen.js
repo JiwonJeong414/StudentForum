@@ -21,6 +21,7 @@ export default function AttendanceScreen() {
   const [users, setUsers] = useState([]);
 
   const navigation = useNavigation();
+  const firestore = firebase.firestore();
 
   useEffect(() => {
     const pinkHouseRef = firebase
@@ -36,7 +37,36 @@ export default function AttendanceScreen() {
     });
   }, []);
 
+  const handleAddTwo = (id) => {
+    const user = users.find((user) => user.id === id);
+    if (user) user.points += 1;
+    user.pointsHistory = [
+      ...user.pointsHistory,
+      "Meeting Attended On " + today,
+    ];
+    console.log(users);
+  };
+
+  const handleUndoTwo = (id) => {
+    const user = users.find((user) => user.id === id);
+    if (user) user.points -= 1;
+    user.pointsHistory.pop();
+    console.log(users);
+  };
+
   const handleDone = () => {
+    const pinkHouseRef = firestore.collection("users").doc("Pink House");
+
+    pinkHouseRef
+      .update({
+        users: users,
+      })
+      .then(() => {
+        console.log("Users array updated successfully!");
+      })
+      .catch((error) => {
+        console.error("Error updating users array: ", error);
+      });
     navigation.navigate("Admin");
   };
 
@@ -57,7 +87,11 @@ export default function AttendanceScreen() {
         data={users}
         renderItem={({ item }) => (
           <View>
-            <Checkmark item={item} />
+            <Checkmark
+              item={item}
+              handleAddTwo={handleAddTwo}
+              handleUndoTwo={handleUndoTwo}
+            />
           </View>
         )}
         keyExtractor={(item) => item.id}
