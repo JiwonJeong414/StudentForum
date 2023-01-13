@@ -4,7 +4,7 @@ import uuid from "react-native-uuid";
 import "firebase/firestore";
 import { Button, IconButton, TextInput } from "react-native-paper";
 import { moderateScale } from "react-native-size-matters";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -44,6 +44,7 @@ export default function HouseScreen() {
           lastname: lastname,
           points: 0,
           id: idd,
+          pointsHistory: [],
         }),
       })
       .then(() => {
