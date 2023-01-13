@@ -11,6 +11,7 @@ export default function AdminScreen() {
   const [users, setUsers] = useState([]);
   const [modal, showModal] = useState(false);
   const [comment, setComment] = useState("");
+  const [tempid, setTempid] = useState("");
 
   const navigation = useNavigation();
 
@@ -44,19 +45,23 @@ export default function AdminScreen() {
     });
   }, []);
 
-  const onModalPress = () => {
+  const onModalPress = (id) => {
     showModal(true);
+    console.log("id: " + id);
+    setTempid(id);
   };
 
   const onAddPress = (id) => {
     const firestore = firebase.firestore();
     const usersRef = firestore.collection("users").doc("Pink House");
+    console.log("id: " + id);
 
     firestore
       .runTransaction((transaction) => {
         return transaction.get(usersRef).then((doc) => {
           let users = doc.data().users;
           let user = users.find((u) => u.id === id);
+          console.log("user: " + user.id);
           user.points += 1;
           transaction.update(usersRef, { users });
         });
@@ -73,6 +78,7 @@ export default function AdminScreen() {
     showModal(false);
     const firestore = firebase.firestore();
     const usersRef = firestore.collection("users").doc("Pink House");
+    console.log("iddef: " + id);
 
     firestore
       .runTransaction((transaction) => {
@@ -131,63 +137,63 @@ export default function AdminScreen() {
               >
                 Add Point
               </Button>
-              <Text style={{ fontWeight: "bold", fontSize: moderateScale(18) }}>
+              <Text style={{ fontWeight: "bold", fontSize: moderateScale(16) }}>
                 Name: {item.firstname + " " + item.lastname + ", "}
               </Text>
-              <Text style={{ fontWeight: "bold", fontSize: moderateScale(18) }}>
+              <Text style={{ fontWeight: "bold", fontSize: moderateScale(16) }}>
                 Points: {item.points}
               </Text>
             </View>
-            <Modal
-              isVisible={modal}
-              animationIn="bounceIn"
-              animationOut="bounceOut"
-              useNativeDriver
-              hideModalContentWhileAnimating
-              onBackdropPress={() => showModal(false)}
-              style={styles.modalBackground}
-            >
-              <View style={styles.modalHeader}>
-                <View style={styles.modal}>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: moderateScale(20),
-                    }}
-                  >
-                    Add Point
-                  </Text>
-                </View>
-                <TextInput
-                  label="Comment"
-                  value={comment}
-                  mode="outlined"
-                  activeOutlineColor="#55BCF6"
-                  onChangeText={(text) => setComment(text)}
-                  style={{
-                    top: moderateScale(10),
-                    width: moderateScale(190),
-                    marginBottom: moderateScale(20),
-                  }}
-                />
-                <Button
-                  mode="contained"
-                  onPress={() => handleAdd(item.id)}
-                  style={{
-                    position: "absolute",
-                    left: moderateScale(195),
-                    top: moderateScale(215),
-                    backgroundColor: "#55BCF6",
-                  }}
-                >
-                  Add
-                </Button>
-              </View>
-            </Modal>
           </View>
         )}
         keyExtractor={(item) => item.id}
       />
+      <Modal
+        isVisible={modal}
+        animationIn="bounceIn"
+        animationOut="bounceOut"
+        useNativeDriver
+        hideModalContentWhileAnimating
+        onBackdropPress={() => showModal(false)}
+        style={styles.modalBackground}
+      >
+        <View style={styles.modalHeader}>
+          <View style={styles.modal}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: moderateScale(20),
+              }}
+            >
+              Add Point
+            </Text>
+          </View>
+          <TextInput
+            label="Comment"
+            value={comment}
+            mode="outlined"
+            activeOutlineColor="#55BCF6"
+            onChangeText={(text) => setComment(text)}
+            style={{
+              top: moderateScale(10),
+              width: moderateScale(190),
+              marginBottom: moderateScale(20),
+            }}
+          />
+          <Button
+            mode="contained"
+            onPress={() => handleAdd(tempid)}
+            style={{
+              position: "absolute",
+              left: moderateScale(195),
+              top: moderateScale(215),
+              backgroundColor: "#55BCF6",
+            }}
+          >
+            Add
+          </Button>
+        </View>
+      </Modal>
     </View>
   );
 }
