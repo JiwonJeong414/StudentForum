@@ -65,6 +65,9 @@ export default function AttendanceScreen() {
     navigation.navigate("Admin");
   };
 
+  // 10 points = .5 Leadership Credit
+  // 20 points = 1 Leadership Credit
+
   return (
     <View styles={styles.container}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>

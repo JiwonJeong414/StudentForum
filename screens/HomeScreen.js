@@ -58,6 +58,9 @@ export default function HomeScreen() {
     return () => unsubscribe();
   }, [key]);
 
+  // 10 points = .5 Leadership Credit
+  // 20 points = 1 Leadership Credit
+
   return (
     <View style={styles.container}>
       <Image
@@ -119,19 +122,6 @@ export default function HomeScreen() {
             bottom: moderateScale(1),
           }}
         >
-          Next Milestone
-        </Text>
-      </View>
-      <View style={styles.rectangle}>
-        <View style={styles.circle} />
-        <Text
-          style={{
-            fontSize: moderateScale(26),
-            fontFamily: "Ubuntu",
-            color: "white",
-            bottom: moderateScale(1),
-          }}
-        >
           Points History
         </Text>
       </View>
@@ -148,6 +138,142 @@ export default function HomeScreen() {
           Learn {"&"} Explore
         </Text>
       </View>
+      {points < 10 ? (
+        <View style={styles.square}>
+          <Text
+            style={{
+              fontSize: moderateScale(50),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(10),
+            }}
+          >
+            {10 - points}
+          </Text>
+          {points > 8 ? (
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(20),
+              }}
+            >
+              Point Needed For
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(20),
+              }}
+            >
+              Points Needed For
+            </Text>
+          )}
+          <Text
+            style={{
+              fontSize: moderateScale(24),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(25),
+            }}
+          >
+            0.5 Leadership Credit
+          </Text>
+        </View>
+      ) : points < 20 ? (
+        <View style={styles.square}>
+          <Text
+            style={{
+              fontSize: moderateScale(50),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(10),
+            }}
+          >
+            {20 - points}
+          </Text>
+          {points > 18 ? (
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(20),
+              }}
+            >
+              Point Needed For
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontSize: moderateScale(30),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(20),
+              }}
+            >
+              Points Needed For
+            </Text>
+          )}
+          <Text
+            style={{
+              fontSize: moderateScale(25),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(25),
+            }}
+          >
+            1 Leadership Credit
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.square}>
+          <Text
+            style={{
+              fontSize: moderateScale(50),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(10),
+            }}
+          >
+            Congrats!
+          </Text>
+          <Text
+            style={{
+              fontSize: moderateScale(25),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(20),
+            }}
+          >
+            1 Leadership Credit
+          </Text>
+          <Text
+            style={{
+              fontSize: moderateScale(25),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(25),
+            }}
+          >
+            Will Be Added
+          </Text>
+          <Text
+            style={{
+              fontSize: moderateScale(25),
+              fontFamily: "Ubuntu",
+              color: "white",
+              top: moderateScale(25),
+            }}
+          >
+            To Your Transcript
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -185,12 +311,20 @@ const styles = StyleSheet.create({
     width: moderateScale(30),
     height: moderateScale(30),
     marginLeft: moderateScale(20),
+    marginRight: moderateScale(15),
+    borderWidth: moderateScale(4),
+    borderRadius: moderateScale(100),
+    borderColor: "#eb7cd8",
+  },
+  square: {
+    width: "80%",
+    backgroundColor: "#6254de",
+    borderRadius: moderateScale(30),
+    marginTop: moderateScale(50),
+    alignItems: "center",
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    marginRight: moderateScale(15),
-    borderWidth: moderateScale(3),
-    borderRadius: moderateScale(100),
-    borderColor: "#eb7cd8",
+    height: moderateScale(170),
   },
 });
