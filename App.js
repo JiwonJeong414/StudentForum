@@ -8,11 +8,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import HouseScreen from "./screens/HouseScreen";
 import AdminScreen from "./screens/AdminScreen";
-import firebase from "./firebase";
+import firebase from "./firebase"; // don't get rid (intializing firebase)
+import { useFonts } from "expo-font";
 import AttendanceScreen from "./screens/AttendanceScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Robot: require("./assets/fonts/NotoSans-Medium.ttf"),
+  });
+
   return (
     <PaperProvider>
       <NavigationContainer>
@@ -35,17 +40,38 @@ function RootNavigator() {
         <Stack.Screen
           options={{
             headerShown: false,
-            cardStyle: {
-              transform: [{ translateY: "100%" }],
-            },
           }}
           name="Login"
           component={LoginScreen}
         />
-        <Stack.Screen name="House" component={HouseScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Admin" component={AdminScreen} />
-        <Stack.Screen name="Attendance" component={AttendanceScreen} />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="House"
+          component={HouseScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Home"
+          component={HomeScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Admin"
+          component={AdminScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Attendance"
+          component={AttendanceScreen}
+        />
       </Stack.Navigator>
     </RootContext.Provider>
   );

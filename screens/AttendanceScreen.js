@@ -40,18 +40,13 @@ export default function AttendanceScreen() {
   const handleAddTwo = (id) => {
     const user = users.find((user) => user.id === id);
     if (user) user.points += 1;
-    user.pointsHistory = [
-      ...user.pointsHistory,
-      "Meeting Attended On " + today,
-    ];
-    console.log(users);
+    user.pointsHistory = [...user.pointsHistory, "Meeting Attended " + today];
   };
 
   const handleUndoTwo = (id) => {
     const user = users.find((user) => user.id === id);
     if (user) user.points -= 1;
     user.pointsHistory.pop();
-    console.log(users);
   };
 
   const handleDone = () => {
