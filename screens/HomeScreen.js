@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +17,7 @@ export default function HomeScreen() {
   const [lastName, setLastName] = useState("");
   const [key, setKey] = useState("");
   const [points, setPoints] = useState(0);
+  const [house, setHouse] = useState("");
 
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
@@ -17,6 +25,13 @@ export default function HomeScreen() {
   const firestore = firebase.firestore();
 
   useEffect(() => {
+    const retireveHouseColor = async () => {
+      let retrieveData = await AsyncStorage.getItem("House");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setHouse(retrieveData);
+      else setHouse(retrieveData);
+    };
+    retireveHouseColor();
     const retireveFirstName = async () => {
       let retrieveData = await AsyncStorage.getItem("FirstName");
       retrieveData = JSON.parse(retrieveData);
@@ -42,17 +57,18 @@ export default function HomeScreen() {
 
   // updates automatically when incrementing on firebase
   useEffect(() => {
-    const unsubscribe = firebase
-      .firestore()
+    let doc = house + " " + "House";
+    const unsubscribe = firestore
       .collection("users")
-      .doc("Pink House")
+      .doc(doc)
       .onSnapshot((snapshot) => {
         let id = key;
+        console.log(id);
         if (snapshot.exists & (key !== "")) {
           const user = snapshot.data().users.find((user) => user.id === id);
           setPoints(user.points);
         } else {
-          console.log("Pink House document does not exist");
+          console.log(doc + " document does not exist");
         }
       });
     return () => unsubscribe();
@@ -61,233 +77,351 @@ export default function HomeScreen() {
   // 10 points = .5 Leadership Credit
   // 20 points = 1 Leadership Credit
 
+  console.log(house);
+
   return (
-    <View style={styles.container}>
-      <Image
+    <ScrollView style={styles.container}>
+      <View
         style={{
-          width: screenWidth,
-          height: screenHeight,
-          position: "absolute",
-        }}
-        source={require("../assets/images/pink-01.png")}
-      />
-      <Text
-        style={{
-          fontSize: moderateScale(100),
-          marginTop: moderateScale(50),
-          fontFamily: "Robot",
+          alignItems: "center",
         }}
       >
-        {points}
-      </Text>
-      {points <= 1 ? (
+        {house === "Pink" ? (
+          <Image
+            style={{
+              width: screenWidth,
+              height: screenHeight,
+              position: "absolute",
+            }}
+            source={require("../assets/images/Pink.png")}
+          />
+        ) : house === "Blue" ? (
+          <Image
+            style={{
+              width: screenWidth,
+              height: screenHeight,
+              position: "absolute",
+            }}
+            source={require("../assets/images/Blue.png")}
+          />
+        ) : house === "Green" ? (
+          <Image
+            style={{
+              width: screenWidth,
+              height: screenHeight,
+              position: "absolute",
+            }}
+            source={require("../assets/images/Green.png")}
+          />
+        ) : (
+          <Image
+            style={{
+              width: screenWidth,
+              height: screenHeight,
+              position: "absolute",
+            }}
+            source={require("../assets/images/Orange.png")}
+          />
+        )}
+
         <Text
           style={{
-            fontSize: moderateScale(30),
-            marginTop: moderateScale(-20),
+            fontSize: moderateScale(100),
+            marginTop: moderateScale(50),
             fontFamily: "Robot",
           }}
         >
-          Point
+          {points}
         </Text>
-      ) : (
+        {points <= 1 ? (
+          <Text
+            style={{
+              fontSize: moderateScale(30),
+              marginTop: moderateScale(-20),
+              fontFamily: "Robot",
+            }}
+          >
+            Point
+          </Text>
+        ) : (
+          <Text
+            style={{
+              fontSize: moderateScale(30),
+              marginTop: moderateScale(-20),
+              fontFamily: "Robot",
+            }}
+          >
+            Points
+          </Text>
+        )}
+        <View
+          style={[
+            styles.divider,
+            {
+              backgroundColor:
+                house === "Green"
+                  ? "#8ba2e8"
+                  : house === "Blue"
+                  ? "#6D6D6D"
+                  : house === "Orange"
+                  ? "#c4f0ff"
+                  : "#9585de",
+            },
+          ]}
+        ></View>
         <Text
           style={{
-            fontSize: moderateScale(30),
-            marginTop: moderateScale(-20),
+            fontSize: moderateScale(40),
+            marginTop: moderateScale(20),
+            marginBottom: moderateScale(-20),
             fontFamily: "Robot",
           }}
         >
-          Points
+          Hi {firstName}!
         </Text>
-      )}
-      <View style={styles.divider}></View>
-      <Text
-        style={{
-          fontSize: moderateScale(40),
-          marginTop: moderateScale(20),
-          marginBottom: moderateScale(-20),
-          fontFamily: "Robot",
-        }}
-      >
-        Hi {firstName}!
-      </Text>
-      <View style={styles.rectangle}>
-        <View style={styles.circle} />
-        <Text
-          style={{
-            fontSize: moderateScale(26),
-            fontFamily: "Ubuntu",
-            color: "white",
-            bottom: moderateScale(1),
-          }}
+        <View
+          style={[
+            styles.rectangle,
+            {
+              backgroundColor:
+                house === "Green"
+                  ? "royalblue"
+                  : house === "Blue"
+                  ? "#1c1c1c"
+                  : house === "Orange"
+                  ? "deepskyblue"
+                  : "#9585de",
+            },
+          ]}
         >
-          Points History
-        </Text>
-      </View>
-      <View style={styles.rectangle}>
-        <View style={styles.circle} />
-        <Text
-          style={{
-            fontSize: moderateScale(26),
-            fontFamily: "Ubuntu",
-            color: "white",
-            bottom: moderateScale(1),
-          }}
+          <Text
+            style={{
+              fontSize: moderateScale(26),
+              fontFamily: "Ubuntu",
+              color: "white",
+              bottom: moderateScale(1),
+            }}
+          >
+            Points History
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.rectangle,
+            {
+              backgroundColor:
+                house === "Green"
+                  ? "royalblue"
+                  : house === "Blue"
+                  ? "#1c1c1c"
+                  : house === "Orange"
+                  ? "deepskyblue"
+                  : "#9585de",
+            },
+          ]}
         >
-          Learn {"&"} Explore
-        </Text>
+          <Text
+            style={{
+              fontSize: moderateScale(26),
+              fontFamily: "Ubuntu",
+              color: "white",
+              bottom: moderateScale(1),
+            }}
+          >
+            Learn {"&"} Explore
+          </Text>
+        </View>
+        {points < 10 ? (
+          <View
+            style={[
+              styles.square,
+              {
+                backgroundColor:
+                  house === "Green"
+                    ? "royalblue"
+                    : house === "Blue"
+                    ? "#1c1c1c"
+                    : house === "Orange"
+                    ? "deepskyblue"
+                    : "#9585de",
+              },
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: moderateScale(50),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(10),
+              }}
+            >
+              {10 - points}
+            </Text>
+            {points > 8 ? (
+              <Text
+                style={{
+                  fontSize: moderateScale(30),
+                  fontFamily: "Ubuntu",
+                  color: "white",
+                  top: moderateScale(20),
+                }}
+              >
+                Point Needed For
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: moderateScale(30),
+                  fontFamily: "Ubuntu",
+                  color: "white",
+                  top: moderateScale(20),
+                }}
+              >
+                Points Needed For
+              </Text>
+            )}
+            <Text
+              style={{
+                fontSize: moderateScale(24),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(25),
+              }}
+            >
+              0.5 Leadership Credit
+            </Text>
+          </View>
+        ) : points < 20 ? (
+          <View
+            style={[
+              styles.square,
+              {
+                backgroundColor:
+                  house === "Green"
+                    ? "royalblue"
+                    : house === "Blue"
+                    ? "#1c1c1c"
+                    : house === "Orange"
+                    ? "deepskyblue"
+                    : "#9585de",
+              },
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: moderateScale(50),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(10),
+              }}
+            >
+              {20 - points}
+            </Text>
+            {points > 18 ? (
+              <Text
+                style={{
+                  fontSize: moderateScale(30),
+                  fontFamily: "Ubuntu",
+                  color: "white",
+                  top: moderateScale(20),
+                }}
+              >
+                Point Needed For
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: moderateScale(30),
+                  fontFamily: "Ubuntu",
+                  color: "white",
+                  top: moderateScale(20),
+                }}
+              >
+                Points Needed For
+              </Text>
+            )}
+            <Text
+              style={{
+                fontSize: moderateScale(25),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(25),
+              }}
+            >
+              1 Leadership Credit
+            </Text>
+          </View>
+        ) : (
+          <View
+            style={[
+              styles.square,
+              {
+                backgroundColor:
+                  house === "Green"
+                    ? "royalblue"
+                    : house === "Blue"
+                    ? "#1c1c1c"
+                    : house === "Orange"
+                    ? "deepskyblue"
+                    : "#9585de",
+              },
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: moderateScale(50),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(10),
+              }}
+            >
+              Congrats!
+            </Text>
+            <Text
+              style={{
+                fontSize: moderateScale(25),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(20),
+              }}
+            >
+              1 Leadership Credit
+            </Text>
+            <Text
+              style={{
+                fontSize: moderateScale(25),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(25),
+              }}
+            >
+              Will Be Added
+            </Text>
+            <Text
+              style={{
+                fontSize: moderateScale(25),
+                fontFamily: "Ubuntu",
+                color: "white",
+                top: moderateScale(25),
+              }}
+            >
+              To Your Transcript
+            </Text>
+          </View>
+        )}
       </View>
-      {points < 10 ? (
-        <View style={styles.square}>
-          <Text
-            style={{
-              fontSize: moderateScale(50),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(10),
-            }}
-          >
-            {10 - points}
-          </Text>
-          {points > 8 ? (
-            <Text
-              style={{
-                fontSize: moderateScale(30),
-                fontFamily: "Ubuntu",
-                color: "white",
-                top: moderateScale(20),
-              }}
-            >
-              Point Needed For
-            </Text>
-          ) : (
-            <Text
-              style={{
-                fontSize: moderateScale(30),
-                fontFamily: "Ubuntu",
-                color: "white",
-                top: moderateScale(20),
-              }}
-            >
-              Points Needed For
-            </Text>
-          )}
-          <Text
-            style={{
-              fontSize: moderateScale(24),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(25),
-            }}
-          >
-            0.5 Leadership Credit
-          </Text>
-        </View>
-      ) : points < 20 ? (
-        <View style={styles.square}>
-          <Text
-            style={{
-              fontSize: moderateScale(50),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(10),
-            }}
-          >
-            {20 - points}
-          </Text>
-          {points > 18 ? (
-            <Text
-              style={{
-                fontSize: moderateScale(30),
-                fontFamily: "Ubuntu",
-                color: "white",
-                top: moderateScale(20),
-              }}
-            >
-              Point Needed For
-            </Text>
-          ) : (
-            <Text
-              style={{
-                fontSize: moderateScale(30),
-                fontFamily: "Ubuntu",
-                color: "white",
-                top: moderateScale(20),
-              }}
-            >
-              Points Needed For
-            </Text>
-          )}
-          <Text
-            style={{
-              fontSize: moderateScale(25),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(25),
-            }}
-          >
-            1 Leadership Credit
-          </Text>
-        </View>
-      ) : (
-        <View style={styles.square}>
-          <Text
-            style={{
-              fontSize: moderateScale(50),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(10),
-            }}
-          >
-            Congrats!
-          </Text>
-          <Text
-            style={{
-              fontSize: moderateScale(25),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(20),
-            }}
-          >
-            1 Leadership Credit
-          </Text>
-          <Text
-            style={{
-              fontSize: moderateScale(25),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(25),
-            }}
-          >
-            Will Be Added
-          </Text>
-          <Text
-            style={{
-              fontSize: moderateScale(25),
-              fontFamily: "Ubuntu",
-              color: "white",
-              top: moderateScale(25),
-            }}
-          >
-            To Your Transcript
-          </Text>
-        </View>
-      )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
   },
   text: {
     fontSize: moderateScale(40),
   },
   divider: {
-    backgroundColor: "gray",
     marginTop: moderateScale(20),
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -297,9 +431,9 @@ const styles = StyleSheet.create({
   },
   rectangle: {
     width: "80%",
-    backgroundColor: "#6254de",
     borderRadius: moderateScale(30),
     marginTop: moderateScale(50),
+    justifyContent: "center",
     alignItems: "center",
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -318,9 +452,8 @@ const styles = StyleSheet.create({
   },
   square: {
     width: "80%",
-    backgroundColor: "#6254de",
-    borderRadius: moderateScale(30),
-    marginTop: moderateScale(50),
+    borderRadius: moderateScale(35),
+    marginTop: moderateScale(40),
     alignItems: "center",
     shadowOpacity: 0.3,
     shadowRadius: 4,

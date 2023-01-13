@@ -34,10 +34,12 @@ export default function HouseScreen() {
 
   const handleSetUser = (houseColor) => {
     let idd = uuid.v4().toString();
+    handleAddHouse(houseColor);
+    let newHouseColor = houseColor + " " + "House";
     firebase
       .firestore()
       .collection("users")
-      .doc(houseColor)
+      .doc(newHouseColor)
       .update({
         users: firebase.firestore.FieldValue.arrayUnion({
           firstname: firstname,
@@ -49,9 +51,14 @@ export default function HouseScreen() {
       })
       .then(() => {
         console.log("User data added to Cloud Firestore");
+        console.log(idd);
         retrieveKey(idd);
         navigation.navigate("Home");
       });
+  };
+
+  const handleAddHouse = async (houseColor) => {
+    await AsyncStorage.setItem("House", JSON.stringify(houseColor));
   };
 
   const retrieveKey = async (id) => {
@@ -91,7 +98,7 @@ export default function HouseScreen() {
           backgroundColor: "#eb7cd8",
         }}
         labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
-        onPress={() => handleSetUser("Pink House")}
+        onPress={() => handleSetUser("Pink")}
       >
         Pink
       </Button>
@@ -108,7 +115,7 @@ export default function HouseScreen() {
           backgroundColor: "#0000FF",
         }}
         labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
-        onPress={() => handleSetUser("Blue House")}
+        onPress={() => handleSetUser("Blue")}
       >
         Blue
       </Button>
@@ -125,7 +132,7 @@ export default function HouseScreen() {
           backgroundColor: "#228B22",
         }}
         labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
-        onPress={() => handleSetUser("Green House")}
+        onPress={() => handleSetUser("Green")}
       >
         Green
       </Button>
@@ -142,7 +149,7 @@ export default function HouseScreen() {
           backgroundColor: "#FFA500",
         }}
         labelStyle={{ fontSize: moderateScale(18), fontFamily: "Robot" }}
-        onPress={() => handleSetUser("Orange House")}
+        onPress={() => handleSetUser("Orange")}
       >
         Orange
       </Button>
