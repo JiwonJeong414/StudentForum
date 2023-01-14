@@ -30,9 +30,8 @@ export default function LoginScreen() {
   };
 
   const handleAdmin = () => {
-    navigation.navigate("Admin");
+    navigation.navigate("Password");
   };
-
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Image
@@ -50,6 +49,7 @@ export default function LoginScreen() {
         style={{ width: "60%" }}
         mode="outlined"
         activeOutlineColor="#55BCF6"
+        autoCorrect={false}
       />
       <TextInput
         label="Last Name"
@@ -57,6 +57,7 @@ export default function LoginScreen() {
         style={{ width: "60%", marginTop: moderateScale(20) }}
         mode="outlined"
         activeOutlineColor="#55BCF6"
+        autoCorrect={false}
       />
       <Button
         mode="contained"
@@ -71,7 +72,7 @@ export default function LoginScreen() {
           top: moderateScale(520),
           backgroundColor: "#55BCF6",
         }}
-        labelStyle={{ fontSize: moderateScale(15) }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Ubuntu" }}
       >
         Next
       </Button>
@@ -88,7 +89,7 @@ export default function LoginScreen() {
           top: moderateScale(520),
           backgroundColor: "#55BCF6",
         }}
-        labelStyle={{ fontSize: moderateScale(15) }}
+        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Ubuntu" }}
       >
         Admin
       </Button>

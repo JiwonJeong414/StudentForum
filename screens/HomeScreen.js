@@ -86,10 +86,14 @@ export default function HomeScreen() {
     navigation.navigate("Learn");
   };
 
+  const handleHistoryPress = () => {
+    navigation.navigate("History");
+  };
+
   console.log(house);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View
         style={{
           alignItems: "center",
@@ -188,7 +192,7 @@ export default function HomeScreen() {
         >
           Hi {firstName}!
         </Text>
-        <TouchableOpacity onPress={handleLearnPress}>
+        <TouchableOpacity onPress={handleHistoryPress}>
           <View
             style={[
               styles.rectangle,
@@ -440,7 +444,7 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 }
 

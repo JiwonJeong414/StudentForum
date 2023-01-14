@@ -17,33 +17,47 @@ import { useNavigation } from "@react-navigation/core";
 import Checkmark from "../Components/Checkmark";
 import moment from "moment";
 import NumericInput from "react-native-numeric-input";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MultipleScreen() {
   const [today, setToday] = useState(moment().format("MM/DD/YYYY"));
   const [users, setUsers] = useState([]);
   const [comment, setComment] = useState("");
   const [amount, setAmount] = useState(0);
+  const [houseColor, setHouseColor] = useState("");
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
 
+  let document = houseColor + " " + "House";
+
   useEffect(() => {
-    const pinkHouseRef = firebase
-      .firestore()
-      .collection("users")
-      .doc("Pink House");
-    pinkHouseRef.get().then((snapshot) => {
+    const retireveAdminColor = async () => {
+      let retrieveData = await AsyncStorage.getItem("Admin");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setHouseColor(retrieveData);
+      else setHouseColor(retrieveData);
+    };
+    retireveAdminColor();
+  }, []);
+
+  useEffect(() => {
+    const HouseRef = firestore.collection("users").doc(document);
+    HouseRef.get().then((snapshot) => {
       if (snapshot.exists) {
         setUsers(snapshot.data().users);
       } else {
-        console.log("Pink House document does not exist");
+        console.log(document + " document does not exist");
       }
     });
-  }, []);
+  }, [houseColor]);
 
   const handleAddTwo = (id) => {
-    if (comment === "") {
-      Alert.alert("Comment", "You need to put a comment first!");
+    if (comment === "" || amount === 0) {
+      Alert.alert(
+        "Comment & Point",
+        "You need to finish putting comment and points first! "
+      );
     } else {
       const user = users.find((user) => user.id === id);
       if (user) user.points += amount;
@@ -65,12 +79,10 @@ export default function MultipleScreen() {
   };
 
   const handleDone = () => {
-    const pinkHouseRef = firestore.collection("users").doc("Pink House");
-
-    pinkHouseRef
-      .update({
-        users: users,
-      })
+    const HouseRef = firestore.collection("users").doc(document);
+    HouseRef.update({
+      users: users,
+    })
       .then(() => {
         console.log("Users array updated successfully!");
       })
@@ -84,35 +96,43 @@ export default function MultipleScreen() {
   // 20 points = 1 Leadership Credit
 
   return (
-    <View styles={styles.container}>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text
-          style={{
-            fontSize: moderateScale(20),
-            marginBottom: moderateScale(20),
-            marginTop: moderateScale(80),
-          }}
-        >
-          Select Multiple
-        </Text>
-      </View>
-      <View style={{ flexDirection: "row" }}>
-        <NumericInput onChange={(value) => setAmount(value)} minValue={1} />
-        <TextInput
-          label="Comment"
-          value={comment}
-          mode="outlined"
-          activeOutlineColor="#55BCF6"
-          onChangeText={(text) => setComment(text)}
-          style={{
-            top: moderateScale(10),
-            width: moderateScale(190),
-            marginBottom: moderateScale(20),
-          }}
-        />
-      </View>
+    <View style={styles.container}>
       <FlatList
         data={users}
+        ListHeaderComponent={
+          <View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: moderateScale(35),
+                  marginBottom: moderateScale(20),
+                  marginTop: moderateScale(75),
+                  fontFamily: "RobotBold",
+                }}
+              >
+                Select Multiple
+              </Text>
+            </View>
+            <View style={{ flexDirection: "column", alignItems: "center" }}>
+              <NumericInput
+                onChange={(value) => setAmount(value)}
+                minValue={1}
+              />
+              <TextInput
+                label="Comment"
+                value={comment}
+                mode="outlined"
+                activeOutlineColor="#55BCF6"
+                onChangeText={(text) => setComment(text)}
+                style={{
+                  marginTop: moderateScale(15),
+                  width: moderateScale(190),
+                  marginBottom: moderateScale(20),
+                }}
+              />
+            </View>
+          </View>
+        }
         renderItem={({ item }) => (
           <View>
             <Checkmark
@@ -120,25 +140,35 @@ export default function MultipleScreen() {
               handleAddTwo={handleAddTwo}
               handleUndoTwo={handleUndoTwo}
               comment={comment}
+              point={amount}
             />
           </View>
         )}
         keyExtractor={(item) => item.id}
+        ListFooterComponent={
+          <View style={{ alignItems: "center" }}>
+            <Button
+              mode="contained"
+              style={{
+                marginRight: moderateScale(40),
+                marginBottom: moderateScale(80),
+                marginTop: moderateScale(20),
+                marginLeft: moderateScale(20),
+                width: moderateScale(140),
+                height: moderateScale(45),
+                justifyContent: "center",
+              }}
+              labelStyle={{
+                fontSize: moderateScale(21),
+                fontFamily: "Ubuntu",
+              }}
+              onPress={handleDone}
+            >
+              Done
+            </Button>
+          </View>
+        }
       />
-      <View style={{ alignItems: "center" }}>
-        <Button
-          mode="contained"
-          style={{
-            marginBottom: moderateScale(20),
-            marginTop: moderateScale(20),
-            width: moderateScale(120),
-            height: moderateScale(40),
-          }}
-          onPress={handleDone}
-        >
-          Done
-        </Button>
-      </View>
     </View>
   );
 }

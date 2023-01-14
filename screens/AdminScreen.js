@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FlatList, Text, StyleSheet, View, Alert } from "react-native";
+import { FlatList, Text, StyleSheet, View, Alert, Image } from "react-native";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import Modal from "react-native-modal";
@@ -7,6 +7,7 @@ import { Button, IconButton, TextInput } from "react-native-paper";
 import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import NumericInput from "react-native-numeric-input";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AdminScreen() {
   const [users, setUsers] = useState([]);
@@ -14,39 +15,48 @@ export default function AdminScreen() {
   const [comment, setComment] = useState("");
   const [tempid, setTempid] = useState("");
   const [amount, setAmount] = useState(1);
+  const [houseColor, setHouseColor] = useState("");
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
 
+  let document = houseColor + " " + "House";
+
+  useEffect(() => {
+    const retireveAdminColor = async () => {
+      let retrieveData = await AsyncStorage.getItem("Admin");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setHouseColor(retrieveData);
+      else setHouseColor(retrieveData);
+    };
+    retireveAdminColor();
+  }, []);
+
   // updates automatically when incrementing on firebase
   useEffect(() => {
-    const unsubscribe = firebase
-      .firestore()
+    const unsubscribe = firestore
       .collection("users")
-      .doc("Pink House")
+      .doc(document)
       .onSnapshot((snapshot) => {
         if (snapshot.exists) {
           setUsers(snapshot.data().users);
         } else {
-          console.log("Pink House document does not exist");
+          console.log(document + " document does not exist");
         }
       });
     return () => unsubscribe();
-  }, []);
+  }, [houseColor]);
 
   useEffect(() => {
-    const pinkHouseRef = firebase
-      .firestore()
-      .collection("users")
-      .doc("Pink House");
-    pinkHouseRef.get().then((snapshot) => {
+    const HouseRef = firestore.collection("users").doc(document);
+    HouseRef.get().then((snapshot) => {
       if (snapshot.exists) {
         setUsers(snapshot.data().users);
       } else {
-        console.log("Pink House document does not exist");
+        console.log(document + " document does not exist");
       }
     });
-  }, []);
+  }, [houseColor]);
 
   const onModalPress = (id) => {
     showModal(true);
@@ -55,7 +65,7 @@ export default function AdminScreen() {
   };
 
   const onAddPress = (id) => {
-    const usersRef = firestore.collection("users").doc("Pink House");
+    const usersRef = firestore.collection("users").doc(document);
     console.log("id: " + id);
 
     firestore
@@ -81,7 +91,7 @@ export default function AdminScreen() {
       Alert.alert("Comment", "You need to put in a comment!");
     } else {
       showModal(false);
-      const usersRef = firestore.collection("users").doc("Pink House");
+      const usersRef = firestore.collection("users").doc(document);
       console.log("iddef: " + id);
 
       firestore
@@ -118,49 +128,71 @@ export default function AdminScreen() {
   };
 
   return (
-    <View styles={styles.container}>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <View style={{ flexDirection: "row" }}>
-          <Button
-            mode="contained"
-            style={{
-              marginRight: moderateScale(40),
-              marginBottom: moderateScale(10),
-              marginTop: moderateScale(50),
-              marginLeft: moderateScale(20),
-              width: moderateScale(140),
-              height: moderateScale(45),
-              justifyContent: "center",
-            }}
-            labelStyle={{
-              fontSize: moderateScale(18),
-            }}
-            onPress={handleAttendance}
-          >
-            Attendance
-          </Button>
-          <Button
-            mode="contained"
-            style={{
-              marginRight: moderateScale(20),
-              marginBottom: moderateScale(10),
-              marginTop: moderateScale(50),
-              marginLeft: moderateScale(20),
-              width: moderateScale(140),
-              height: moderateScale(45),
-              justifyContent: "center",
-            }}
-            labelStyle={{
-              fontSize: moderateScale(18),
-            }}
-            onPress={handleMultiple}
-          >
-            Multiple
-          </Button>
-        </View>
-      </View>
+    <View style={styles.container}>
       <FlatList
         data={users}
+        ListHeaderComponent={
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Text
+              style={{
+                fontFamily: "RobotBold",
+                fontSize: moderateScale(40),
+                marginTop: moderateScale(60),
+              }}
+            >
+              {houseColor} House
+            </Text>
+            <Image
+              style={{
+                width: moderateScale(190),
+                height: moderateScale(190),
+                marginTop: moderateScale(10),
+                marginBottom: moderateScale(-20),
+              }}
+              source={require("../assets/images/sf-logo.png")}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                mode="contained"
+                style={{
+                  marginRight: moderateScale(40),
+                  marginBottom: moderateScale(10),
+                  marginTop: moderateScale(50),
+                  marginLeft: moderateScale(20),
+                  width: moderateScale(140),
+                  height: moderateScale(45),
+                  justifyContent: "center",
+                }}
+                labelStyle={{
+                  fontSize: moderateScale(19),
+                  fontFamily: "Ubuntu",
+                }}
+                onPress={handleAttendance}
+              >
+                Attendance
+              </Button>
+              <Button
+                mode="contained"
+                style={{
+                  marginRight: moderateScale(20),
+                  marginBottom: moderateScale(10),
+                  marginTop: moderateScale(50),
+                  marginLeft: moderateScale(20),
+                  width: moderateScale(140),
+                  height: moderateScale(45),
+                  justifyContent: "center",
+                }}
+                labelStyle={{
+                  fontSize: moderateScale(19),
+                  fontFamily: "Ubuntu",
+                }}
+                onPress={handleMultiple}
+              >
+                Multiple
+              </Button>
+            </View>
+          </View>
+        }
         renderItem={({ item }) => (
           <View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -231,6 +263,7 @@ export default function AdminScreen() {
               style={{
                 color: "white",
                 fontSize: moderateScale(20),
+                fontFamily: "Robot",
               }}
             >
               Add Point
@@ -243,7 +276,6 @@ export default function AdminScreen() {
             activeOutlineColor="#55BCF6"
             onChangeText={(text) => setComment(text)}
             style={{
-              top: moderateScale(10),
               width: moderateScale(190),
               marginBottom: moderateScale(20),
             }}
@@ -254,9 +286,15 @@ export default function AdminScreen() {
             onPress={() => handleAdd(tempid)}
             style={{
               position: "absolute",
-              left: moderateScale(195),
-              top: moderateScale(215),
+              left: moderateScale(175),
+              top: moderateScale(210),
+              width: moderateScale(80),
+              height: moderateScale(35),
               backgroundColor: "#55BCF6",
+            }}
+            labelStyle={{
+              fontSize: moderateScale(18),
+              fontFamily: "Robot",
             }}
           >
             Add

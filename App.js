@@ -13,6 +13,8 @@ import { useFonts } from "expo-font";
 import AttendanceScreen from "./screens/AttendanceScreen";
 import LearnScreen from "./screens/LearnScreen";
 import MultipleScreen from "./screens/MultipleScreen";
+import PasswordScreen from "./screens/PasswordScreen";
+import PointsHistoryScreen from "./screens/PointsHistoryScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -21,7 +23,9 @@ export default function App() {
     RobotBold: require("./assets/fonts/NotoSans-Bold.ttf"),
     Ubuntu: require("./assets/fonts/UbuntuMono-Regular.ttf"),
   });
-
+  if (!fontsLoaded) {
+    return <></>;
+  }
   return (
     <PaperProvider>
       <NavigationContainer>
@@ -89,6 +93,20 @@ function RootNavigator() {
           }}
           name="Multiple"
           component={MultipleScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Password"
+          component={PasswordScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="History"
+          component={PointsHistoryScreen}
         />
       </Stack.Navigator>
     </RootContext.Provider>

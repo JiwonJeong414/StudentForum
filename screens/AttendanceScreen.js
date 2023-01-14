@@ -15,27 +15,38 @@ import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import Checkmark from "../Components/Checkmark";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AttendanceScreen() {
   const [today, setToday] = useState(moment().format("MM/DD/YYYY"));
   const [users, setUsers] = useState([]);
+  const [houseColor, setHouseColor] = useState("");
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
 
+  let document = houseColor + " " + "House";
+
   useEffect(() => {
-    const pinkHouseRef = firebase
-      .firestore()
-      .collection("users")
-      .doc("Pink House");
-    pinkHouseRef.get().then((snapshot) => {
+    const retireveAdminColor = async () => {
+      let retrieveData = await AsyncStorage.getItem("Admin");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setHouseColor(retrieveData);
+      else setHouseColor(retrieveData);
+    };
+    retireveAdminColor();
+  }, []);
+
+  useEffect(() => {
+    const HouseRef = firestore.collection("users").doc(document);
+    HouseRef.get().then((snapshot) => {
       if (snapshot.exists) {
         setUsers(snapshot.data().users);
       } else {
-        console.log("Pink House document does not exist");
+        console.log(document + " document does not exist");
       }
     });
-  }, []);
+  }, [houseColor]);
 
   const handleAddTwo = (id) => {
     const user = users.find((user) => user.id === id);
@@ -53,12 +64,10 @@ export default function AttendanceScreen() {
   };
 
   const handleDone = () => {
-    const pinkHouseRef = firestore.collection("users").doc("Pink House");
-
-    pinkHouseRef
-      .update({
-        users: users,
-      })
+    const HouseRef = firestore.collection("users").doc(document);
+    HouseRef.update({
+      users: users,
+    })
       .then(() => {
         console.log("Users array updated successfully!");
       })
@@ -72,20 +81,23 @@ export default function AttendanceScreen() {
   // 20 points = 1 Leadership Credit
 
   return (
-    <View styles={styles.container}>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text
-          style={{
-            fontSize: moderateScale(20),
-            marginBottom: moderateScale(20),
-            marginTop: moderateScale(20),
-          }}
-        >
-          Attendance For {today}
-        </Text>
-      </View>
+    <View style={styles.container}>
       <FlatList
         data={users}
+        ListHeaderComponent={
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: moderateScale(25),
+                marginBottom: moderateScale(20),
+                marginTop: moderateScale(55),
+                fontFamily: "RobotBold",
+              }}
+            >
+              Attendance For {today}
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <View>
             <Checkmark
@@ -96,29 +108,36 @@ export default function AttendanceScreen() {
           </View>
         )}
         keyExtractor={(item) => item.id}
+        ListFooterComponent={
+          <View style={{ alignItems: "center" }}>
+            <Button
+              mode="contained"
+              style={{
+                marginRight: moderateScale(40),
+                marginBottom: moderateScale(80),
+                marginTop: moderateScale(20),
+                marginLeft: moderateScale(20),
+                width: moderateScale(140),
+                height: moderateScale(45),
+                justifyContent: "center",
+              }}
+              labelStyle={{
+                fontSize: moderateScale(21),
+                fontFamily: "Ubuntu",
+              }}
+              onPress={handleDone}
+            >
+              Done
+            </Button>
+          </View>
+        }
       />
-      <View style={{ alignItems: "center" }}>
-        <Button
-          mode="contained"
-          style={{
-            marginBottom: moderateScale(20),
-            marginTop: moderateScale(20),
-            width: moderateScale(120),
-            height: moderateScale(40),
-          }}
-          onPress={handleDone}
-        >
-          Done
-        </Button>
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   modalBackground: {
     justifyContent: "center",
     alignItems: "center",
