@@ -15,6 +15,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import Checkmark from "../Components/Checkmark";
 import moment from "moment";
+import uuid from "react-native-uuid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AttendanceScreen() {
@@ -49,11 +50,12 @@ export default function AttendanceScreen() {
   }, [houseColor]);
 
   const handleAddTwo = (id) => {
+    let idd = uuid.v4().toString();
     const user = users.find((user) => user.id === id);
     if (user) user.points += 1;
     user.pointsHistory = [
       ...user.pointsHistory,
-      { comment: "Meeting Attended " + today, points: 1 },
+      { comment: "Meeting Attended " + today, points: 1, id: idd },
     ];
   };
 

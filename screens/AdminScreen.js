@@ -8,6 +8,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import NumericInput from "react-native-numeric-input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
 
 export default function AdminScreen() {
   const [users, setUsers] = useState([]);
@@ -90,6 +91,7 @@ export default function AdminScreen() {
     if (comment === "") {
       Alert.alert("Comment", "You need to put in a comment!");
     } else {
+      let idd = uuid.v4().toString();
       showModal(false);
       const usersRef = firestore.collection("users").doc(document);
       console.log("iddef: " + id);
@@ -101,7 +103,7 @@ export default function AdminScreen() {
             let user = users.find((u) => u.id === id);
             user.pointsHistory = [
               ...user.pointsHistory,
-              { comment: comment, points: amount },
+              { comment: comment, points: amount, id: idd },
             ];
             transaction.update(usersRef, { users });
           });

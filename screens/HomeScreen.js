@@ -12,6 +12,7 @@ import { moderateScale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/core";
+import uuid from "react-native-uuid";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import "firebase/firestore";
 

@@ -16,6 +16,7 @@ import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import Checkmark from "../Components/Checkmark";
 import moment from "moment";
+import uuid from "react-native-uuid";
 import NumericInput from "react-native-numeric-input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -59,11 +60,12 @@ export default function MultipleScreen() {
         "You need to finish putting comment and points first! "
       );
     } else {
+      let idd = uuid.v4().toString();
       const user = users.find((user) => user.id === id);
       if (user) user.points += amount;
       user.pointsHistory = [
         ...user.pointsHistory,
-        { comment: comment, points: amount },
+        { comment: comment, points: amount, id: idd },
       ];
     }
   };
