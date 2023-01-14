@@ -73,7 +73,9 @@ export default function HomeScreen() {
         console.log(id);
         if (snapshot.exists & (key !== "")) {
           const user = snapshot.data().users.find((user) => user.id === id);
-          setPoints(user.points);
+          if (user !== undefined) {
+            setPoints(user.points);
+          }
         } else {
           console.log(doc + " document does not exist");
         }

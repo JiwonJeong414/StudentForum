@@ -63,7 +63,9 @@ function RootNavigator() {
   }, []);
 
   return (
-    <RootContext.Provider value={{ userId: userId, setUserId: setUserId }}>
+    <RootContext.Provider
+      value={{ onboarded: onboarded, setOnboard: setOnboard }}
+    >
       {loading === true ? (
         <View style={{ flex: 1, justifyContent: "center" }}>
           <ActivityIndicator animating={true} color="black" />

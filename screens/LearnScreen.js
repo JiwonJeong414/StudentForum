@@ -1,8 +1,85 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, Image, ScrollView, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
+import { useNavigation } from "@react-navigation/core";
+import "firebase/firestore";
+import firebase from "firebase/app";
+import { Button, IconButton, TextInput } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootContext } from "../config/RootContext";
 
 const LearnScreen = () => {
+  const [key, setKey] = useState("");
+  const [house, setHouse] = useState("");
+  const [users, setUsers] = useState([]);
+
+  const { onboarded, setOnboard } = React.useContext(RootContext);
+
+  const navigation = useNavigation();
+
+  const firestore = firebase.firestore();
+
+  let doc = house + " " + "House";
+
+  useEffect(() => {
+    const retireveHouseColor = async () => {
+      let retrieveData = await AsyncStorage.getItem("House");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setHouse(retrieveData);
+      else setHouse(retrieveData);
+    };
+    retireveHouseColor();
+    const retrieveKey = async () => {
+      let retrieveData = await AsyncStorage.getItem("Key");
+      retrieveData = JSON.parse(retrieveData);
+      if (retrieveData == null) setKey(retrieveData);
+      else setKey(retrieveData);
+    };
+    retrieveKey();
+  }, []);
+
+  useEffect(() => {
+    const HouseRef = firestore.collection("users").doc(doc);
+    HouseRef.get().then((snapshot) => {
+      if (snapshot.exists) {
+        setUsers(snapshot.data().users);
+      } else {
+        console.log(doc + " document does not exist");
+      }
+    });
+  }, [house]);
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account?",
+      [
+        {
+          text: "No",
+        },
+        {
+          text: "Yes",
+          onPress: () => handleDeleteButton(),
+        },
+      ]
+    );
+  };
+
+  const handleDeleteButton = () => {
+    let doc = house + " " + "House";
+    var HouseRef = firestore.collection("users").doc(doc);
+    const user = users.find((user) => user.id === key);
+    const index = users.indexOf(user);
+    users.splice(index, 1);
+    HouseRef.update({
+      users: users,
+    }).then(() => {
+      navigation.navigate("Login");
+      setOnboard(false);
+    });
+    // Remove the user object with the specified key from the "users" array
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ alignItems: "center" }}>
@@ -132,6 +209,22 @@ const LearnScreen = () => {
           Name: Jiwon Jeong {"                     "}Email:
           jiwonjeong414@gmail.com
         </Text>
+        <Button
+          mode="contained"
+          style={{
+            marginBottom: moderateScale(80),
+            width: moderateScale(200),
+            height: moderateScale(45),
+            justifyContent: "center",
+          }}
+          labelStyle={{
+            fontSize: moderateScale(21),
+            fontFamily: "Ubuntu",
+          }}
+          onPress={handleDelete}
+        >
+          Delete Account
+        </Button>
       </View>
     </ScrollView>
   );
