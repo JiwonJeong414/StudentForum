@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
-import { FlatList, Text, StyleSheet, View } from "react-native";
+import { FlatList, Text, StyleSheet, View, Alert } from "react-native";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import Modal from "react-native-modal";
 import { Button, IconButton, TextInput } from "react-native-paper";
 import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
+import NumericInput from "react-native-numeric-input";
 
 export default function AdminScreen() {
   const [users, setUsers] = useState([]);
   const [modal, showModal] = useState(false);
   const [comment, setComment] = useState("");
   const [tempid, setTempid] = useState("");
+  const [amount, setAmount] = useState(1);
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
@@ -62,7 +64,7 @@ export default function AdminScreen() {
           let users = doc.data().users;
           let user = users.find((u) => u.id === id);
           console.log("user: " + user.id);
-          user.points += 1;
+          user.points += amount;
           transaction.update(usersRef, { users });
         });
       })
@@ -75,50 +77,87 @@ export default function AdminScreen() {
   };
 
   const handleAdd = (id) => {
-    showModal(false);
-    const usersRef = firestore.collection("users").doc("Pink House");
-    console.log("iddef: " + id);
+    if (comment === "") {
+      Alert.alert("Comment", "You need to put in a comment!");
+    } else {
+      showModal(false);
+      const usersRef = firestore.collection("users").doc("Pink House");
+      console.log("iddef: " + id);
 
-    firestore
-      .runTransaction((transaction) => {
-        return transaction.get(usersRef).then((doc) => {
-          let users = doc.data().users;
-          let user = users.find((u) => u.id === id);
-          user.pointsHistory = [...user.pointsHistory, comment];
-          transaction.update(usersRef, { users });
+      firestore
+        .runTransaction((transaction) => {
+          return transaction.get(usersRef).then((doc) => {
+            let users = doc.data().users;
+            let user = users.find((u) => u.id === id);
+            user.pointsHistory = [
+              ...user.pointsHistory,
+              { comment: comment, points: amount },
+            ];
+            transaction.update(usersRef, { users });
+          });
+        })
+        .then(() => {
+          console.log("Transaction successfully committed!");
+        })
+        .catch((error) => {
+          console.log("Transaction failed: ", error);
         });
-      })
-      .then(() => {
-        console.log("Transaction successfully committed!");
-      })
-      .catch((error) => {
-        console.log("Transaction failed: ", error);
-      });
-    setComment("");
-    setTimeout(() => {
-      onAddPress(id);
-    }, 1000);
+      setComment("");
+      setTimeout(() => {
+        onAddPress(id);
+      }, 1000);
+    }
   };
 
   const handleAttendance = () => {
     navigation.navigate("Attendance");
   };
 
+  const handleMultiple = () => {
+    navigation.navigate("Multiple");
+  };
+
   return (
     <View styles={styles.container}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Button
-          mode="contained"
-          style={{
-            marginBottom: moderateScale(20),
-            marginTop: moderateScale(20),
-            width: moderateScale(180),
-            height: moderateScale(40),
-          }}
-          onPress={handleAttendance}
-        >
-          Take Attendance
-        </Button>
+        <View style={{ flexDirection: "row" }}>
+          <Button
+            mode="contained"
+            style={{
+              marginRight: moderateScale(40),
+              marginBottom: moderateScale(10),
+              marginTop: moderateScale(50),
+              marginLeft: moderateScale(20),
+              width: moderateScale(140),
+              height: moderateScale(45),
+              justifyContent: "center",
+            }}
+            labelStyle={{
+              fontSize: moderateScale(18),
+            }}
+            onPress={handleAttendance}
+          >
+            Attendance
+          </Button>
+          <Button
+            mode="contained"
+            style={{
+              marginRight: moderateScale(20),
+              marginBottom: moderateScale(10),
+              marginTop: moderateScale(50),
+              marginLeft: moderateScale(20),
+              width: moderateScale(140),
+              height: moderateScale(45),
+              justifyContent: "center",
+            }}
+            labelStyle={{
+              fontSize: moderateScale(18),
+            }}
+            onPress={handleMultiple}
+          >
+            Multiple
+          </Button>
+        </View>
       </View>
       <FlatList
         data={users}
@@ -131,18 +170,48 @@ export default function AdminScreen() {
                   backgroundColor: "#55BCF6",
                   marginRight: moderateScale(10),
                   marginBottom: moderateScale(10),
+                  top: moderateScale(5),
+                  marginLeft: moderateScale(20),
+                  width: moderateScale(90),
+                  height: moderateScale(45),
+                  justifyContent: "center",
+                }}
+                labelStyle={{
+                  fontSize: moderateScale(23),
                 }}
                 onPress={() => onModalPress(item.id, item.points)}
               >
-                Add Point
+                +
               </Button>
-              <Text style={{ fontWeight: "bold", fontSize: moderateScale(16) }}>
-                Name: {item.firstname + " " + item.lastname + ", "}
-              </Text>
-              <Text style={{ fontWeight: "bold", fontSize: moderateScale(16) }}>
-                Points: {item.points}
-              </Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: moderateScale(20),
+                    fontFamily: "RobotBold",
+                  }}
+                >
+                  {item.firstname + " " + item.lastname}
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: moderateScale(22),
+                    fontFamily: "Ubuntu",
+                  }}
+                >
+                  Points: {item.points}
+                </Text>
+              </View>
             </View>
+            <View
+              style={{
+                width: moderateScale(338),
+                left: moderateScale(20),
+                height: moderateScale(1),
+                backgroundColor: "gray",
+              }}
+            />
           </View>
         )}
         keyExtractor={(item) => item.id}
@@ -179,6 +248,7 @@ export default function AdminScreen() {
               marginBottom: moderateScale(20),
             }}
           />
+          <NumericInput onChange={(value) => setAmount(value)} minValue={1} />
           <Button
             mode="contained"
             onPress={() => handleAdd(tempid)}

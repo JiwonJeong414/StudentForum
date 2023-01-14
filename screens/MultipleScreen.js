@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -15,10 +16,13 @@ import { moderateScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/core";
 import Checkmark from "../Components/Checkmark";
 import moment from "moment";
+import NumericInput from "react-native-numeric-input";
 
-export default function AttendanceScreen() {
+export default function MultipleScreen() {
   const [today, setToday] = useState(moment().format("MM/DD/YYYY"));
   const [users, setUsers] = useState([]);
+  const [comment, setComment] = useState("");
+  const [amount, setAmount] = useState(0);
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
@@ -38,18 +42,26 @@ export default function AttendanceScreen() {
   }, []);
 
   const handleAddTwo = (id) => {
-    const user = users.find((user) => user.id === id);
-    if (user) user.points += 1;
-    user.pointsHistory = [
-      ...user.pointsHistory,
-      { comment: "Meeting Attended " + today, points: 1 },
-    ];
+    if (comment === "") {
+      Alert.alert("Comment", "You need to put a comment first!");
+    } else {
+      const user = users.find((user) => user.id === id);
+      if (user) user.points += amount;
+      user.pointsHistory = [
+        ...user.pointsHistory,
+        { comment: comment, points: amount },
+      ];
+    }
   };
 
   const handleUndoTwo = (id) => {
-    const user = users.find((user) => user.id === id);
-    if (user) user.points -= 1;
-    user.pointsHistory.pop();
+    if (comment === "") {
+      Alert.alert("Comment", "You need to put a comment first!");
+    } else {
+      const user = users.find((user) => user.id === id);
+      if (user) user.points -= amount;
+      user.pointsHistory.pop();
+    }
   };
 
   const handleDone = () => {
@@ -78,11 +90,26 @@ export default function AttendanceScreen() {
           style={{
             fontSize: moderateScale(20),
             marginBottom: moderateScale(20),
-            marginTop: moderateScale(20),
+            marginTop: moderateScale(80),
           }}
         >
-          Attendance For {today}
+          Select Multiple
         </Text>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <NumericInput onChange={(value) => setAmount(value)} minValue={1} />
+        <TextInput
+          label="Comment"
+          value={comment}
+          mode="outlined"
+          activeOutlineColor="#55BCF6"
+          onChangeText={(text) => setComment(text)}
+          style={{
+            top: moderateScale(10),
+            width: moderateScale(190),
+            marginBottom: moderateScale(20),
+          }}
+        />
       </View>
       <FlatList
         data={users}
@@ -92,6 +119,7 @@ export default function AttendanceScreen() {
               item={item}
               handleAddTwo={handleAddTwo}
               handleUndoTwo={handleUndoTwo}
+              comment={comment}
             />
           </View>
         )}

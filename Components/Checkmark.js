@@ -5,19 +5,19 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from "moment";
 
-const Checkmark = ({ item, handleAddTwo, handleUndoTwo }) => {
+const Checkmark = ({ item, handleAddTwo, handleUndoTwo, comment }) => {
   const [checkMark, showCheckMark] = useState(false);
   const [today, setToday] = useState(moment().format("MM/DD/YYYY"));
   const firestore = firebase.firestore();
 
   const handleAdd = (id) => {
-    showCheckMark(true);
     handleAddTwo(id);
+    if (comment !== "") showCheckMark(true);
   };
 
   const handleUndo = (id) => {
-    showCheckMark(false);
     handleUndoTwo(id);
+    if (comment !== "") showCheckMark(false);
   };
 
   return (

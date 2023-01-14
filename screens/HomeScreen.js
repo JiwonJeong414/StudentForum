@@ -5,11 +5,14 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { moderateScale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase from "firebase/app";
+import { useNavigation } from "@react-navigation/core";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import "firebase/firestore";
 
 export default function HomeScreen() {
@@ -18,6 +21,8 @@ export default function HomeScreen() {
   const [key, setKey] = useState("");
   const [points, setPoints] = useState(0);
   const [house, setHouse] = useState("");
+
+  const navigation = useNavigation();
 
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
@@ -76,6 +81,10 @@ export default function HomeScreen() {
 
   // 10 points = .5 Leadership Credit
   // 20 points = 1 Leadership Credit
+
+  const handleLearnPress = () => {
+    navigation.navigate("Learn");
+  };
 
   console.log(house);
 
@@ -179,58 +188,79 @@ export default function HomeScreen() {
         >
           Hi {firstName}!
         </Text>
-        <View
-          style={[
-            styles.rectangle,
-            {
-              backgroundColor:
-                house === "Green"
-                  ? "royalblue"
-                  : house === "Blue"
-                  ? "#1c1c1c"
-                  : house === "Orange"
-                  ? "deepskyblue"
-                  : "#9585de",
-            },
-          ]}
-        >
-          <Text
-            style={{
-              fontSize: moderateScale(26),
-              fontFamily: "Ubuntu",
-              color: "white",
-              bottom: moderateScale(1),
-            }}
+        <TouchableOpacity onPress={handleLearnPress}>
+          <View
+            style={[
+              styles.rectangle,
+              {
+                backgroundColor:
+                  house === "Green"
+                    ? "royalblue"
+                    : house === "Blue"
+                    ? "#1c1c1c"
+                    : house === "Orange"
+                    ? "deepskyblue"
+                    : "#6254de",
+              },
+            ]}
           >
-            Points History
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.rectangle,
-            {
-              backgroundColor:
-                house === "Green"
-                  ? "royalblue"
-                  : house === "Blue"
-                  ? "#1c1c1c"
-                  : house === "Orange"
-                  ? "deepskyblue"
-                  : "#9585de",
-            },
-          ]}
-        >
-          <Text
-            style={{
-              fontSize: moderateScale(26),
-              fontFamily: "Ubuntu",
-              color: "white",
-              bottom: moderateScale(1),
-            }}
+            <MaterialCommunityIcons
+              name="star-four-points"
+              size={moderateScale(35)}
+              style={{
+                color: "white",
+                right: moderateScale(20),
+              }}
+            />
+            <Text
+              style={{
+                fontSize: moderateScale(26),
+                fontFamily: "Ubuntu",
+                color: "white",
+                bottom: moderateScale(1),
+              }}
+            >
+              Points History
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLearnPress}>
+          <View
+            style={[
+              styles.rectangle,
+              {
+                backgroundColor:
+                  house === "Green"
+                    ? "royalblue"
+                    : house === "Blue"
+                    ? "#1c1c1c"
+                    : house === "Orange"
+                    ? "deepskyblue"
+                    : "#6254de",
+              },
+            ]}
           >
-            Learn {"&"} Explore
-          </Text>
-        </View>
+            <MaterialIcons
+              name="explore"
+              size={moderateScale(35)}
+              style={{
+                color: "white",
+                right: moderateScale(12),
+              }}
+            />
+            <Text
+              style={{
+                fontSize: moderateScale(26),
+                left: moderateScale(8),
+                fontFamily: "Ubuntu",
+                color: "white",
+                bottom: moderateScale(1),
+              }}
+            >
+              Learn {"&"} Explore
+            </Text>
+          </View>
+        </TouchableOpacity>
         {points < 10 ? (
           <View
             style={[
@@ -243,7 +273,7 @@ export default function HomeScreen() {
                     ? "#1c1c1c"
                     : house === "Orange"
                     ? "deepskyblue"
-                    : "#9585de",
+                    : "#6254de",
               },
             ]}
           >
@@ -303,7 +333,7 @@ export default function HomeScreen() {
                     ? "#1c1c1c"
                     : house === "Orange"
                     ? "deepskyblue"
-                    : "#9585de",
+                    : "#6254de",
               },
             ]}
           >
@@ -363,7 +393,7 @@ export default function HomeScreen() {
                     ? "#1c1c1c"
                     : house === "Orange"
                     ? "deepskyblue"
-                    : "#9585de",
+                    : "#6254de",
               },
             ]}
           >
@@ -430,7 +460,7 @@ const styles = StyleSheet.create({
     height: moderateScale(10),
   },
   rectangle: {
-    width: "80%",
+    width: moderateScale(300),
     borderRadius: moderateScale(30),
     marginTop: moderateScale(50),
     justifyContent: "center",
@@ -451,7 +481,7 @@ const styles = StyleSheet.create({
     borderColor: "#eb7cd8",
   },
   square: {
-    width: "80%",
+    width: moderateScale(300),
     borderRadius: moderateScale(35),
     marginTop: moderateScale(40),
     alignItems: "center",

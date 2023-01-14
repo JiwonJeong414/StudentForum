@@ -11,11 +11,14 @@ import AdminScreen from "./screens/AdminScreen";
 import firebase from "./firebase"; // don't get rid (intializing firebase)
 import { useFonts } from "expo-font";
 import AttendanceScreen from "./screens/AttendanceScreen";
+import LearnScreen from "./screens/LearnScreen";
+import MultipleScreen from "./screens/MultipleScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   let [fontsLoaded] = useFonts({
     Robot: require("./assets/fonts/NotoSans-Medium.ttf"),
+    RobotBold: require("./assets/fonts/NotoSans-Bold.ttf"),
     Ubuntu: require("./assets/fonts/UbuntuMono-Regular.ttf"),
   });
 
@@ -72,6 +75,20 @@ function RootNavigator() {
           }}
           name="Attendance"
           component={AttendanceScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+          }}
+          name="Learn"
+          component={LearnScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Multiple"
+          component={MultipleScreen}
         />
       </Stack.Navigator>
     </RootContext.Provider>
