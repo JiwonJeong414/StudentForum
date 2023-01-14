@@ -1,8 +1,8 @@
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import { RootContext } from "./config/RootContext";
-import React, { useState, useEffect, createContext } from "react";
-import { StyleSheet, Text, View, Animated } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -15,6 +15,10 @@ import LearnScreen from "./screens/LearnScreen";
 import MultipleScreen from "./screens/MultipleScreen";
 import PasswordScreen from "./screens/PasswordScreen";
 import PointsHistoryScreen from "./screens/PointsHistoryScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator } from "react-native-paper";
+import { View } from "react-native";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -37,78 +41,168 @@ export default function App() {
 
 function RootNavigator() {
   const [userId, setUserId] = useState("");
+  const [onboarded, setOnboard] = useState(false);
+  const [adminboarded, setAdminboard] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const checkIfLoggedIn = async () => {
+      let userName = await AsyncStorage.getItem("FirstName");
+      let Admin = await AsyncStorage.getItem("Admin");
+      userName = JSON.parse(userName);
+      Admin = JSON.parse(Admin);
+      if (userName !== null) {
+        console.log("KImchi");
+        setOnboard(true);
+      } else if (Admin !== null) setAdminboard(true);
+    };
+    setLoading(true);
+    checkIfLoggedIn();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <RootContext.Provider value={{ userId: userId, setUserId: setUserId }}>
-      <Stack.Navigator
-        screenOptions={{
-          animation: "slide_from_bottom",
-        }}
-      >
-        <Stack.Screen
-          options={{
-            headerShown: false,
+      {loading === true ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator animating={true} color="black" />
+        </View>
+      ) : onboarded === false && adminboarded === false ? (
+        <Stack.Navigator
+          screenOptions={{
+            animation: "slide_from_bottom",
           }}
-          name="Login"
-          component={LoginScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
+        >
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Login"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="House"
+            component={HouseScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Home"
+            component={HomeScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Admin"
+            component={AdminScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Attendance"
+            component={AttendanceScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: true,
+            }}
+            name="Learn"
+            component={LearnScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Multiple"
+            component={MultipleScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Password"
+            component={PasswordScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="History"
+            component={PointsHistoryScreen}
+          />
+        </Stack.Navigator>
+      ) : onboarded === true ? (
+        <Stack.Navigator
+          screenOptions={{
+            animation: "slide_from_bottom",
           }}
-          name="House"
-          component={HouseScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
+        >
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Home"
+            component={HomeScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: true,
+            }}
+            name="Learn"
+            component={LearnScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="History"
+            component={PointsHistoryScreen}
+          />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator
+          screenOptions={{
+            animation: "slide_from_bottom",
           }}
-          name="Home"
-          component={HomeScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Admin"
-          component={AdminScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Attendance"
-          component={AttendanceScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: true,
-          }}
-          name="Learn"
-          component={LearnScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Multiple"
-          component={MultipleScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Password"
-          component={PasswordScreen}
-        />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="History"
-          component={PointsHistoryScreen}
-        />
-      </Stack.Navigator>
+        >
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Admin"
+            component={AdminScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Attendance"
+            component={AttendanceScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Multiple"
+            component={MultipleScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="Password"
+            component={PasswordScreen}
+          />
+        </Stack.Navigator>
+      )}
     </RootContext.Provider>
   );
 }

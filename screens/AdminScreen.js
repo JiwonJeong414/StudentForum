@@ -249,6 +249,9 @@ export default function AdminScreen() {
           </View>
         )}
         keyExtractor={(item) => item.id}
+        ListFooterComponent={
+          <View style={{ marginBottom: moderateScale(70) }}></View>
+        }
       />
       <Modal
         isVisible={modal}
