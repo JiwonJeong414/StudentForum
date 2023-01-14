@@ -3,6 +3,8 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
+  Platform,
+  View,
   Alert,
 } from "react-native";
 import React, { useState } from "react";
@@ -35,6 +37,9 @@ export default function PasswordScreen() {
       Alert.alert("Incorrect Password");
     }
   };
+  const handleBack = () => {
+    navigation.navigate("Login");
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -42,8 +47,8 @@ export default function PasswordScreen() {
         style={{
           width: moderateScale(190),
           height: moderateScale(190),
-          position: "absolute",
-          top: moderateScale(120),
+          marginTop: moderateScale(-120),
+          marginBottom: moderateScale(20),
         }}
         source={require("../assets/images/sf-logo.png")}
       />
@@ -55,28 +60,45 @@ export default function PasswordScreen() {
           height: moderateScale(35),
           borderColor: "gray",
           textAlign: "center",
-          width: moderateScale(160),
+          width: moderateScale(190),
           borderRadius: moderateScale(10),
           borderWidth: moderateScale(1),
         }}
         onChangeText={(text) => setPassword(text)}
       />
-      <Button
-        mode="contained"
-        onPress={() => handleAdmin()}
-        style={{
-          position: "absolute",
-          width: moderateScale(140),
-          height: moderateScale(38),
-          justifyContent: "center",
-          borderRadius: moderateScale(30),
-          top: moderateScale(450),
-          backgroundColor: "#55BCF6",
-        }}
-        labelStyle={{ fontSize: moderateScale(19), fontFamily: "Ubuntu" }}
-      >
-        Submit
-      </Button>
+      <View style={{ flexDirection: "row" }}>
+        <Button
+          mode="contained"
+          onPress={() => handleBack()}
+          style={{
+            width: moderateScale(90),
+            height: moderateScale(38),
+            marginRight: moderateScale(10),
+            justifyContent: "center",
+            borderRadius: moderateScale(30),
+            marginTop: moderateScale(30),
+            backgroundColor: "#55BCF6",
+          }}
+          labelStyle={{ fontSize: moderateScale(15), fontFamily: "Ubuntu" }}
+        >
+          Back
+        </Button>
+        <Button
+          mode="contained"
+          onPress={() => handleAdmin()}
+          style={{
+            width: moderateScale(90),
+            height: moderateScale(38),
+            justifyContent: "center",
+            borderRadius: moderateScale(30),
+            marginTop: moderateScale(30),
+            backgroundColor: "#55BCF6",
+          }}
+          labelStyle={{ fontSize: moderateScale(14), fontFamily: "Ubuntu" }}
+        >
+          Submit
+        </Button>
+      </View>
     </KeyboardAvoidingView>
   );
 }

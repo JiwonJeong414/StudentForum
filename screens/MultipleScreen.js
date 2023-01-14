@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Platform,
   Image,
   Alert,
 } from "react-native";
@@ -108,7 +109,10 @@ export default function MultipleScreen() {
                 style={{
                   fontSize: moderateScale(35),
                   marginBottom: moderateScale(20),
-                  marginTop: moderateScale(75),
+                  marginTop:
+                    Platform.OS === "ios"
+                      ? moderateScale(75)
+                      : moderateScale(50),
                   fontFamily: "RobotBold",
                 }}
               >

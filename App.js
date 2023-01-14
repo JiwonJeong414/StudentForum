@@ -52,7 +52,6 @@ function RootNavigator() {
       userName = JSON.parse(userName);
       Admin = JSON.parse(Admin);
       if (userName !== null) {
-        console.log("KImchi");
         setOnboard(true);
       } else if (Admin !== null) setAdminboard(true);
     };

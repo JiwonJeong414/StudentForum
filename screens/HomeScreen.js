@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  Platform,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -141,7 +142,9 @@ export default function HomeScreen() {
         <Text
           style={{
             fontSize: moderateScale(100),
-            marginTop: moderateScale(50),
+
+            marginTop:
+              Platform.OS === "ios" ? moderateScale(50) : moderateScale(-20),
             fontFamily: "Robot",
           }}
         >
@@ -151,7 +154,8 @@ export default function HomeScreen() {
           <Text
             style={{
               fontSize: moderateScale(30),
-              marginTop: moderateScale(-20),
+              marginTop:
+                Platform.OS === "ios" ? moderateScale(-20) : moderateScale(-35),
               fontFamily: "Robot",
             }}
           >
@@ -161,7 +165,9 @@ export default function HomeScreen() {
           <Text
             style={{
               fontSize: moderateScale(30),
-              marginTop: moderateScale(-20),
+              marginTop:
+                Platform.OS === "ios" ? moderateScale(-20) : moderateScale(-35),
+
               fontFamily: "Robot",
             }}
           >
@@ -186,8 +192,12 @@ export default function HomeScreen() {
         <Text
           style={{
             fontSize: moderateScale(40),
-            marginTop: moderateScale(20),
-            marginBottom: moderateScale(-20),
+            marginTop:
+              Platform.OS === "ios" ? moderateScale(20) : moderateScale(10),
+
+            marginBottom:
+              Platform.OS === "ios" ? moderateScale(-20) : moderateScale(-35),
+
             fontFamily: "Robot",
           }}
         >
@@ -460,7 +470,7 @@ const styles = StyleSheet.create({
     marginTop: moderateScale(20),
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 11,
     width: "50%",
     height: moderateScale(10),
   },
@@ -472,7 +482,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 11,
     flexDirection: "row",
     height: moderateScale(80),
   },
@@ -492,7 +502,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 11,
     height: moderateScale(170),
   },
 });

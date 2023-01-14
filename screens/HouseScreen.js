@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { Button, IconButton, TextInput } from "react-native-paper";
@@ -80,7 +87,7 @@ export default function HouseScreen() {
         style={{
           fontSize: moderateScale(30),
           fontFamily: "Robot",
-          top: moderateScale(-50),
+          top: Platform.OS === "ios" ? moderateScale(-50) : moderateScale(-20),
         }}
       >
         Choose Your House

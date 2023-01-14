@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   FlatList,
+  Platform,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     fontFamily: "Robot",
     color: "white",
     fontSize: moderateScale(40),
-    marginTop: moderateScale(50),
+    marginTop: Platform.OS === "ios" ? moderateScale(50) : moderateScale(30),
   },
   comment: {
     textAlign: "left",

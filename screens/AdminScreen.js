@@ -166,7 +166,7 @@ export default function AdminScreen() {
                   justifyContent: "center",
                 }}
                 labelStyle={{
-                  fontSize: moderateScale(19),
+                  fontSize: moderateScale(18),
                   fontFamily: "Ubuntu",
                 }}
                 onPress={handleAttendance}
@@ -185,7 +185,7 @@ export default function AdminScreen() {
                   justifyContent: "center",
                 }}
                 labelStyle={{
-                  fontSize: moderateScale(19),
+                  fontSize: moderateScale(18),
                   fontFamily: "Ubuntu",
                 }}
                 onPress={handleMultiple}

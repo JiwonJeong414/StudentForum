@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Platform,
 } from "react-native";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -92,7 +93,8 @@ export default function AttendanceScreen() {
               style={{
                 fontSize: moderateScale(25),
                 marginBottom: moderateScale(20),
-                marginTop: moderateScale(55),
+                marginTop:
+                  Platform.OS === "ios" ? moderateScale(55) : moderateScale(30),
                 fontFamily: "RobotBold",
               }}
             >

@@ -38,8 +38,8 @@ export default function LoginScreen() {
         style={{
           width: moderateScale(190),
           height: moderateScale(190),
-          position: "absolute",
-          top: moderateScale(120),
+          marginTop: moderateScale(-120),
+          marginBottom: moderateScale(20),
         }}
         source={require("../assets/images/sf-logo.png")}
       />
@@ -59,40 +59,38 @@ export default function LoginScreen() {
         activeOutlineColor="#55BCF6"
         autoCorrect={false}
       />
-      <Button
-        mode="contained"
-        onPress={handleAddUserData}
-        style={{
-          position: "absolute",
-          width: moderateScale(90),
-          height: moderateScale(38),
-          left: moderateScale(212),
-          justifyContent: "center",
-          borderRadius: moderateScale(30),
-          top: moderateScale(520),
-          backgroundColor: "#55BCF6",
-        }}
-        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Ubuntu" }}
-      >
-        Next
-      </Button>
-      <Button
-        mode="contained"
-        onPress={handleAdmin}
-        style={{
-          position: "absolute",
-          width: moderateScale(90),
-          height: moderateScale(38),
-          left: moderateScale(75),
-          justifyContent: "center",
-          borderRadius: moderateScale(30),
-          top: moderateScale(520),
-          backgroundColor: "#55BCF6",
-        }}
-        labelStyle={{ fontSize: moderateScale(18), fontFamily: "Ubuntu" }}
-      >
-        Admin
-      </Button>
+      <View style={{ flexDirection: "row" }}>
+        <Button
+          mode="contained"
+          onPress={handleAdmin}
+          style={{
+            width: moderateScale(90),
+            marginRight: moderateScale(50),
+            marginTop: moderateScale(30),
+            height: moderateScale(38),
+            alignSelf: "flex-start",
+            borderRadius: moderateScale(30),
+            backgroundColor: "#55BCF6",
+          }}
+          labelStyle={{ fontSize: moderateScale(17), fontFamily: "Ubuntu" }}
+        >
+          Admin
+        </Button>
+        <Button
+          mode="contained"
+          onPress={handleAddUserData}
+          style={{
+            width: moderateScale(90),
+            height: moderateScale(38),
+            alignSelf: "flex-end",
+            borderRadius: moderateScale(30),
+            backgroundColor: "#55BCF6",
+          }}
+          labelStyle={{ fontSize: moderateScale(17), fontFamily: "Ubuntu" }}
+        >
+          Next
+        </Button>
+      </View>
     </KeyboardAvoidingView>
   );
 }
