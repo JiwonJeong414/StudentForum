@@ -42,7 +42,7 @@ export default function AdminScreen() {
         if (snapshot.exists) {
           setUsers(snapshot.data().users);
         } else {
-          console.log(document + " document does not exist");
+          // console.log(document + " document does not exist");
         }
       });
     return () => unsubscribe();
@@ -54,36 +54,36 @@ export default function AdminScreen() {
       if (snapshot.exists) {
         setUsers(snapshot.data().users);
       } else {
-        console.log(document + " document does not exist");
+        // console.log(document + " document does not exist");
       }
     });
   }, [houseColor]);
 
   const onModalPress = (id) => {
     showModal(true);
-    console.log("id: " + id);
+    //console.log("id: " + id);
     setTempid(id);
   };
 
   const onAddPress = (id) => {
     const usersRef = firestore.collection("users").doc(document);
-    console.log("id: " + id);
+    // console.log("id: " + id);
 
     firestore
       .runTransaction((transaction) => {
         return transaction.get(usersRef).then((doc) => {
           let users = doc.data().users;
           let user = users.find((u) => u.id === id);
-          console.log("user: " + user.id);
+          // console.log("user: " + user.id);
           user.points += amount;
           transaction.update(usersRef, { users });
         });
       })
       .then(() => {
-        console.log("Transaction successfully committed!");
+        // console.log("Transaction successfully committed!");
       })
       .catch((error) => {
-        console.log("Transaction failed: ", error);
+        //   console.log("Transaction failed: ", error);
       });
   };
 
@@ -94,7 +94,7 @@ export default function AdminScreen() {
       let idd = uuid.v4().toString();
       showModal(false);
       const usersRef = firestore.collection("users").doc(document);
-      console.log("iddef: " + id);
+      //  console.log("iddef: " + id);
 
       firestore
         .runTransaction((transaction) => {
@@ -109,10 +109,10 @@ export default function AdminScreen() {
           });
         })
         .then(() => {
-          console.log("Transaction successfully committed!");
+          // console.log("Transaction successfully committed!");
         })
         .catch((error) => {
-          console.log("Transaction failed: ", error);
+          // console.log("Transaction failed: ", error);
         });
       setComment("");
       setTimeout(() => {

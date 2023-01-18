@@ -56,7 +56,7 @@ const PointsHistoryScreen = () => {
           const user = snapshot.data().users.find((user) => user.id === id);
           setPointsData(user.pointsHistory);
         } else {
-          console.log(doc + " document does not exist");
+          //   console.log(doc + " document does not exist");
         }
       });
     return () => unsubscribe();
@@ -72,14 +72,14 @@ const PointsHistoryScreen = () => {
           let users = doc.data().users;
           let user = users.find((u) => u.id === key);
           setPointsData(user.pointsHistory);
-          console.log(pointsData);
+          // console.log(pointsData);
         });
       })
       .then(() => {
-        console.log("Transaction successfully committed!");
+        //  console.log("Transaction successfully committed!");
       })
       .catch((error) => {
-        console.log("Transaction failed: ", error);
+        //  console.log("Transaction failed: ", error);
       });
   }, [key, house]);
 

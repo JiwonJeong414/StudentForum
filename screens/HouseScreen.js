@@ -57,8 +57,8 @@ export default function HouseScreen() {
         }),
       })
       .then(() => {
-        console.log("User data added to Cloud Firestore");
-        console.log(idd);
+        //console.log("User data added to Cloud Firestore");
+        //console.log(idd);
         retrieveKey(idd);
         navigation.navigate("Home");
       });

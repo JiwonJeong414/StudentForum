@@ -45,7 +45,7 @@ export default function AttendanceScreen() {
       if (snapshot.exists) {
         setUsers(snapshot.data().users);
       } else {
-        console.log(document + " document does not exist");
+        //console.log(document + " document does not exist");
       }
     });
   }, [houseColor]);
@@ -72,10 +72,10 @@ export default function AttendanceScreen() {
       users: users,
     })
       .then(() => {
-        console.log("Users array updated successfully!");
+        // console.log("Users array updated successfully!");
       })
       .catch((error) => {
-        console.error("Error updating users array: ", error);
+        // console.error("Error updating users array: ", error);
       });
     navigation.navigate("Admin");
   };

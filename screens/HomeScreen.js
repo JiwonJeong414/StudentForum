@@ -70,12 +70,12 @@ export default function HomeScreen() {
       .doc(doc)
       .onSnapshot((snapshot) => {
         let id = key;
-        console.log(id);
+        // console.log(id);
         if (snapshot.exists & (key !== "")) {
           const user = snapshot.data().users.find((user) => user.id === id);
           setPoints(user.points);
         } else {
-          console.log(doc + " document does not exist");
+          // console.log(doc + " document does not exist");
         }
       });
     return () => unsubscribe();
@@ -92,7 +92,7 @@ export default function HomeScreen() {
     navigation.navigate("History");
   };
 
-  console.log(house);
+  // console.log(house);
 
   return (
     <View style={styles.container}>
