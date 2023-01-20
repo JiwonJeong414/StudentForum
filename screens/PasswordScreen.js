@@ -14,8 +14,12 @@ import { moderateScale } from "react-native-size-matters";
 import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootContext } from "../config/RootContext";
 
 export default function PasswordScreen() {
+  const { onboarded, setOnboard, adminboarded, setAdminboard } =
+    React.useContext(RootContext);
+
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
@@ -23,16 +27,16 @@ export default function PasswordScreen() {
   const handleAdmin = async () => {
     if (password === "Green House") {
       await AsyncStorage.setItem("Admin", JSON.stringify("Green"));
-      navigation.navigate("Admin");
+      setAdminboard(true);
     } else if (password === "Pink House") {
       await AsyncStorage.setItem("Admin", JSON.stringify("Pink"));
-      navigation.navigate("Admin");
+      setAdminboard(true);
     } else if (password === "Blue House") {
       await AsyncStorage.setItem("Admin", JSON.stringify("Blue"));
-      navigation.navigate("Admin");
+      setAdminboard(true);
     } else if (password === "Orange House") {
       await AsyncStorage.setItem("Admin", JSON.stringify("Orange"));
-      navigation.navigate("Admin");
+      setAdminboard(true);
     } else {
       Alert.alert("Incorrect Password");
     }

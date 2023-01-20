@@ -14,8 +14,12 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootContext } from "../config/RootContext";
 
 export default function HouseScreen() {
+  const { onboarded, setOnboard, adminboarded, setAdminboard } =
+    React.useContext(RootContext);
+
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [house, setHouse] = useState("");
@@ -42,6 +46,7 @@ export default function HouseScreen() {
   const handleSetUser = (houseColor) => {
     let idd = uuid.v4().toString();
     handleAddHouse(houseColor);
+    retrieveKey(idd);
     let newHouseColor = houseColor + " " + "House";
     firebase
       .firestore()
@@ -59,8 +64,7 @@ export default function HouseScreen() {
       .then(() => {
         //console.log("User data added to Cloud Firestore");
         //console.log(idd);
-        retrieveKey(idd);
-        navigation.navigate("Home");
+        setOnboard(true);
       });
   };
 

@@ -60,7 +60,7 @@ export default function HomeScreen() {
       else setKey(retrieveData);
     };
     retrieveKey();
-  }, []);
+  }, [key]);
 
   // updates automatically when incrementing on firebase
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function HomeScreen() {
       .onSnapshot((snapshot) => {
         let id = key;
         // console.log(id);
-        if (snapshot.exists & (key !== "")) {
+        if (snapshot.exists && key !== "") {
           const user = snapshot.data().users.find((user) => user.id === id);
           setPoints(user.points);
         } else {

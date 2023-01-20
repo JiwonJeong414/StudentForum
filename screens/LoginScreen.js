@@ -15,7 +15,7 @@ import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen() {
+const LoginScreen = () => {
   const [internaluuid, setUuid] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
@@ -93,7 +93,7 @@ export default function LoginScreen() {
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -102,3 +102,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default LoginScreen;

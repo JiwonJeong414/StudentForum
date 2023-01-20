@@ -298,7 +298,7 @@ export default function AdminScreen() {
               backgroundColor: "#55BCF6",
             }}
             labelStyle={{
-              fontSize: moderateScale(18),
+              fontSize: moderateScale(17),
               fontFamily: "Robot",
             }}
           >
