@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FlatList, Text, StyleSheet, View, Alert, Image } from "react-native";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/core";
 import NumericInput from "react-native-numeric-input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
+import { RootContext } from "../config/RootContext";
 
 export default function AdminScreen() {
   const [users, setUsers] = useState([]);
@@ -17,6 +18,8 @@ export default function AdminScreen() {
   const [tempid, setTempid] = useState("");
   const [amount, setAmount] = useState(1);
   const [houseColor, setHouseColor] = useState("");
+
+  const { adminboarded, setAdminboard } = useContext(RootContext);
 
   const navigation = useNavigation();
   const firestore = firebase.firestore();
@@ -129,10 +132,16 @@ export default function AdminScreen() {
     navigation.navigate("Multiple");
   };
 
+  const handleDelete = () => {
+    AsyncStorage.clear();
+    setAdminboard(false);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={users}
+        horizontal={false}
         ListHeaderComponent={
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Text
@@ -250,7 +259,29 @@ export default function AdminScreen() {
         )}
         keyExtractor={(item) => item.id}
         ListFooterComponent={
-          <View style={{ marginBottom: moderateScale(70) }}></View>
+          <View
+            style={{
+              marginBottom: moderateScale(70),
+              alignItems: "center",
+            }}
+          >
+            <Button
+              mode="contained"
+              style={{
+                width: moderateScale(210),
+                marginTop: moderateScale(40),
+                height: moderateScale(45),
+                justifyContent: "center",
+              }}
+              labelStyle={{
+                fontSize: moderateScale(21),
+                fontFamily: "Ubuntu",
+              }}
+              onPress={handleDelete}
+            >
+              Delete Account
+            </Button>
+          </View>
         }
       />
       <Modal

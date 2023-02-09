@@ -2,7 +2,7 @@
   "expo": {
     "name": "Student Forum",
     "slug": "StudentForum",
-    "version": "1.0.21",
+    "version": "1.0.22",
     "orientation": "portrait",
     "icon": "./assets/student-Icon-01.png",
     "userInterfaceStyle": "light",
@@ -18,11 +18,11 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jiwonjeong414.StudentForum",
-      "buildNumber": "1.0.21"
+      "buildNumber": "1.0.22"
     },
     "android": {
       "package": "com.jiwonjeong414.StudentForum",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

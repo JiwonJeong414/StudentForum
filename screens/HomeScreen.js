@@ -75,7 +75,11 @@ export default function HomeScreen() {
         // console.log(id);
         if (snapshot.exists && key !== "") {
           const user = snapshot.data().users.find((user) => user.id === id);
-          setPoints(user.points);
+          try {
+            setPoints(user.points);
+          } catch {
+            console.log("Deleting Account");
+          }
         } else {
           // console.log(doc + " document does not exist");
         }
@@ -101,11 +105,11 @@ export default function HomeScreen() {
       style={{
         backgroundColor:
           house === "Green"
-            ? "#8ba2e8"
+            ? "#A0FFAF"
             : house === "Blue"
-            ? "#6D6D6D"
+            ? "#95C5FF"
             : house === "Orange"
-            ? "#c4f0ff"
+            ? "#FFD587"
             : "#F5B4C5",
         flex: 1,
       }}
@@ -114,11 +118,11 @@ export default function HomeScreen() {
         style={{
           backgroundColor:
             house === "Green"
-              ? "#8ba2e8"
+              ? "#49FF59"
               : house === "Blue"
-              ? "#6D6D6D"
+              ? "#2D85E0"
               : house === "Orange"
-              ? "#c4f0ff"
+              ? "#FFA20B"
               : "#E88EDC",
           height: fullHeight,
           position: "absolute",

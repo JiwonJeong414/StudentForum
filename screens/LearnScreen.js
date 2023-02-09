@@ -65,6 +65,21 @@ const LearnScreen = () => {
     );
   };
 
+  const handleDeleteButton = async () => {
+    let doc = house + " " + "House";
+    var HouseRef = firestore.collection("users").doc(doc);
+    const user = users.find((user) => user.id === key);
+    const index = users.indexOf(user);
+    users.splice(index, 1);
+    HouseRef.update({
+      users: users,
+    }).then(() => {
+      AsyncStorage.clear();
+      setOnboard(false);
+    });
+    // Remove the user object with the specified key from the "users" array
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ alignItems: "center" }}>
@@ -198,6 +213,7 @@ const LearnScreen = () => {
           mode="contained"
           style={{
             marginBottom: moderateScale(80),
+            bottom: moderateScale(30),
             width: moderateScale(210),
             height: moderateScale(45),
             justifyContent: "center",
