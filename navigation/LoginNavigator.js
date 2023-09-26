@@ -15,6 +15,7 @@ import AdminScreen from "../screens/AdminScreen";
 import AttendanceScreen from "../screens/AttendanceScreen";
 import MultipleScreen from "../screens/MultipleScreen";
 import PasswordScreen from "../screens/PasswordScreen";
+import LeaderboardScreen from "../screens/LeaderboardScreen";
 
 const HomeTabStack = createNativeStackNavigator();
 
@@ -46,6 +47,13 @@ export function HomeTabNavigator({ navigation }) {
         }}
         name="History"
         component={PointsHistoryScreen}
+      />
+      <HomeTabStack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Leaderboard"
+        component={LeaderboardScreen}
       />
     </HomeTabStack.Navigator>
   );

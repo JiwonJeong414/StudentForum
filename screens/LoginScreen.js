@@ -3,6 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
   Image,
   KeyboardAvoidingView,
 } from "react-native";
@@ -24,9 +25,13 @@ const LoginScreen = () => {
 
   const handleAddUserData = async () => {
     // asyncstorage to save this idd (you need this cause when someone opens the app again, the uid is gone, lets make it so that they cannot signout)
-    await AsyncStorage.setItem("FirstName", JSON.stringify(firstname));
-    await AsyncStorage.setItem("LastName", JSON.stringify(lastname));
-    navigation.navigate("House");
+    if (firstname === "" || lastname === "") {
+      Alert.alert("Alert", "Please Put Your First And Last Name!");
+    } else {
+      await AsyncStorage.setItem("FirstName", JSON.stringify(firstname));
+      await AsyncStorage.setItem("LastName", JSON.stringify(lastname));
+      navigation.navigate("House");
+    }
   };
 
   const handleAdmin = () => {

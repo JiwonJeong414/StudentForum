@@ -22,6 +22,7 @@
     "expo-font": "^11.0.1",
     "expo-status-bar": "~1.4.2",
     "firebase": "^8.2.3",
+    "lottie-react-native": "^5.1.5",
     "moment": "^2.29.4",
     "react": "18.1.0",
     "react-native": "0.70.5",
@@ -33,7 +34,8 @@
     "react-native-size-matters": "^0.4.0",
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.2.0",
-    "rmc-input-number": "^1.0.5"
+    "rmc-input-number": "^1.0.5",
+    "expo-updates": "~0.15.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

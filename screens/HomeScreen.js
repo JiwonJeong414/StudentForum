@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/core";
 import uuid from "react-native-uuid";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import "firebase/firestore";
+import { RootContext } from "../config/RootContext";
 
 export default function HomeScreen() {
   const [firstName, setFirstName] = useState("");
@@ -23,6 +24,7 @@ export default function HomeScreen() {
   const [key, setKey] = useState("");
   const [points, setPoints] = useState(0);
   const [house, setHouse] = useState("");
+  const { onboarded, setOnboard } = React.useContext(RootContext);
 
   const navigation = useNavigation();
 
@@ -78,10 +80,10 @@ export default function HomeScreen() {
           try {
             setPoints(user.points);
           } catch {
-            console.log("Deleting Account");
+            AsyncStorage.clear();
+            setOnboard(false);
+            // Remove the user object with the specified key from the "users" array
           }
-        } else {
-          // console.log(doc + " document does not exist");
         }
       });
     return () => unsubscribe();
@@ -96,6 +98,10 @@ export default function HomeScreen() {
 
   const handleHistoryPress = () => {
     navigation.navigate("History");
+  };
+
+  const handleLeaderboardPress = () => {
+    navigation.navigate("Leaderboard");
   };
 
   // console.log(house);
